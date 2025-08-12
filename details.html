@@ -11,7 +11,7 @@
 <body>
   <header class="topbar">
     <div class="container topbar__content">
-      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span>AutoCat</span></h1>
+      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span id="brandName">AutoCat</span></h1>
       <nav class="nav">
         <a href="index.html">Catálogo</a>
       </nav>
@@ -44,6 +44,11 @@
           <div><dt>Cor</dt><dd id="color"></dd></div>
         </dl>
 
+        <div class="featuresWrap">
+          <h3>Opcionais</h3>
+          <ul id="features" class="features"></ul>
+        </div>
+
         <div class="cta" id="contacts"></div>
       </div>
     </div>
@@ -55,7 +60,7 @@
 
   <footer class="footer">
     <div class="container">
-      <small>AutoCat • Detalhes do Carro</small>
+      <small id="footerBrand">AutoCat • Detalhes do Carro</small>
     </div>
   </footer>
 

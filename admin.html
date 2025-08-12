@@ -11,7 +11,7 @@
 <body>
   <header class="topbar">
     <div class="container topbar__content">
-      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span>AutoCat</span></h1>
+      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span id="brandName">AutoCat</span></h1>
       <nav class="nav">
         <a href="index.html">Catálogo</a>
         <a href="admin.html" class="active">Admin</a>
@@ -93,6 +93,36 @@
           <textarea id="description" rows="3" placeholder="Destaques, estado, revisões, etc."></textarea>
         </label>
 
+        <fieldset class="featuresOpt card">
+          <legend>Opcionais</legend>
+          <div class="features-grid">
+            <label><input type="checkbox" class="feat" value="Direção hidráulica"/> Direção hidráulica</label>
+            <label><input type="checkbox" class="feat" value="Direção elétrica"/> Direção elétrica</label>
+            <label><input type="checkbox" class="feat" value="Ar-condicionado"/> Ar-condicionado</label>
+            <label><input type="checkbox" class="feat" value="Ar digital"/> Ar digital</label>
+            <label><input type="checkbox" class="feat" value="Vidros elétricos"/> Vidros elétricos</label>
+            <label><input type="checkbox" class="feat" value="Travas elétricas"/> Travas elétricas</label>
+            <label><input type="checkbox" class="feat" value="Alarme"/> Alarme</label>
+            <label><input type="checkbox" class="feat" value="Multimídia"/> Multimídia</label>
+            <label><input type="checkbox" class="feat" value="Câmera de ré"/> Câmera de ré</label>
+            <label><input type="checkbox" class="feat" value="Sensor de estacionamento"/> Sensor de estacionamento</label>
+            <label><input type="checkbox" class="feat" value="Piloto automático"/> Piloto automático</label>
+            <label><input type="checkbox" class="feat" value="Controle de estabilidade (ESP)"/> Controle de estabilidade (ESP)</label>
+            <label><input type="checkbox" class="feat" value="Controle de tração (TCS)"/> Controle de tração (TCS)</label>
+            <label><input type="checkbox" class="feat" value="Bancos de couro"/> Bancos de couro</label>
+            <label><input type="checkbox" class="feat" value="Teto solar"/> Teto solar</label>
+            <label><input type="checkbox" class="feat" value="Farol de neblina"/> Farol de neblina</label>
+            <label><input type="checkbox" class="feat" value="Farol LED"/> Farol LED</label>
+            <label><input type="checkbox" class="feat" value="Rodas de liga leve"/> Rodas de liga leve</label>
+            <label><input type="checkbox" class="feat" value="Chave presencial (Keyless)"/> Chave presencial (Keyless)</label>
+            <label><input type="checkbox" class="feat" value="Partida start/stop"/> Partida start/stop</label>
+            <label><input type="checkbox" class="feat" value="Assistente de rampa (HSA)"/> Assistente de rampa (HSA)</label>
+            <label><input type="checkbox" class="feat" value="Tração 4x4"/> Tração 4x4</label>
+            <label><input type="checkbox" class="feat" value="Airbags frontais"/> Airbags frontais</label>
+            <label><input type="checkbox" class="feat" value="Airbags laterais"/> Airbags laterais</label>
+          </div>
+        </fieldset>
+
         <label>URLs das Imagens (uma por linha)
           <textarea id="images" rows="4" placeholder="https://..."></textarea>
         </label>
@@ -112,26 +142,33 @@
     <section class="card">
       <h2>Aparência e Marca</h2>
       <div class="grid-3">
+        <label>Nome do site
+          <input id="brandText" placeholder="Ex: AutoCat"/>
+        </label>
         <label>Cor Primária
           <input type="color" id="themePrimary" value="#4f8cff"/>
         </label>
         <label>Fundo (BG)
           <input type="color" id="themeBg" value="#0b0e13"/>
         </label>
+      </div>
+      <div class="grid-3">
         <label>Cartões (Card)
           <input type="color" id="themeCard" value="#121721"/>
         </label>
-      </div>
-      <div class="grid-3">
         <label>Texto
           <input type="color" id="themeText" value="#e6e9ef"/>
         </label>
         <label>Borda
           <input type="color" id="themeBorder" value="#1f2430"/>
         </label>
+      </div>
+      <div class="grid-3">
         <label>Chip
           <input type="color" id="themeChip" value="#1a202c"/>
         </label>
+        <div></div>
+        <div></div>
       </div>
       <div class="actions">
         <label class="btn file">Upload da Logo
@@ -175,7 +212,7 @@
 
   <footer class="footer">
     <div class="container">
-      <small>AutoCat • Admin</small>
+      <small id="footerBrand">AutoCat • Admin</small>
     </div>
   </footer>
 
