@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin • Carros</title>
+  <link rel="stylesheet" href="assets/css/base.css"/>
+  <link rel="stylesheet" href="assets/css/admin.css"/>
+  <link rel="icon" href="assets/img/favicon.png"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__content">
+      <h1 class="brand">🔷 AutoCat</h1>
+      <nav class="nav">
+        <a href="index.html">Catálogo</a>
+        <a href="admin.html" class="active">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container admin">
+    <section class="card">
+      <h2>Cadastro / Edição de Carro</h2>
+      <form id="carForm" class="form">
+        <input type="hidden" id="carId"/>
+
+        <div class="grid-2">
+          <label>Marca
+            <input id="brand" required placeholder="Ex: Toyota"/>
+          </label>
+          <label>Modelo
+            <input id="model" required placeholder="Ex: Corolla"/>
+          </label>
+        </div>
+
+        <div class="grid-4">
+          <label>Ano
+            <input id="year" type="number" required min="1950" max="2100"/>
+          </label>
+          <label>Preço (R$)
+            <input id="price" type="number" required step="500" min="0"/>
+          </label>
+          <label>KM
+            <input id="km" type="number" required step="100" min="0"/>
+          </label>
+          <label>Cor
+            <input id="color" required placeholder="Ex: Prata"/>
+          </label>
+        </div>
+
+        <div class="grid-3">
+          <label>Câmbio
+            <select id="transmission" required>
+              <option value="Manual">Manual</option>
+              <option value="Automático">Automático</option>
+              <option value="CVT">CVT</option>
+            </select>
+          </label>
+          <label>Combustível
+            <select id="fuel" required>
+              <option value="Flex">Flex</option>
+              <option value="Gasolina">Gasolina</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Elétrico">Elétrico</option>
+              <option value="Híbrido">Híbrido</option>
+            </select>
+          </label>
+          <label>Telefone/WhatsApp
+            <input id="phone" placeholder="5599999999999"/>
+          </label>
+        </div>
+
+        <label>Descrição
+          <textarea id="description" rows="3" placeholder="Destaques, estado, revisões, etc."></textarea>
+        </label>
+
+        <label>URLs das Imagens (uma por linha)
+          <textarea id="images" rows="4" placeholder="https://..."></textarea>
+        </label>
+
+        <div class="actions">
+          <label class="switch">
+            <input type="checkbox" id="published" checked/>
+            <span>Publicado</span>
+          </label>
+          <div class="spacer"></div>
+          <button type="button" id="resetForm" class="btn ghost">Limpar</button>
+          <button type="submit" class="btn primary">Salvar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <header class="list__header">
+        <h2>Meus Carros</h2>
+        <div class="list__tools">
+          <input id="searchAdmin" type="search" placeholder="Buscar..."/>
+          <button id="exportJson" class="btn">Exportar JSON</button>
+          <label class="btn file">
+            Importar JSON
+            <input id="importJson" type="file" accept="application/json" hidden/>
+          </label>
+        </div>
+      </header>
+      <table class="table" id="carsTable">
+        <thead>
+          <tr>
+            <th>Publicado</th>
+            <th>Título</th>
+            <th>Ano</th>
+            <th>KM</th>
+            <th>Preço</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>AutoCat • Admin</small>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes do Carro</title>
+  <link rel="stylesheet" href="assets/css/base.css"/>
+  <link rel="stylesheet" href="assets/css/details.css"/>
+  <link rel="icon" href="assets/img/favicon.png"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__content">
+      <h1 class="brand">🔷 AutoCat</h1>
+      <nav class="nav">
+        <a href="index.html">Catálogo</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="detail" class="detail card" hidden>
+      <div class="gallery">
+        <div class="gallery__main">
+          <img id="photoMain" alt="Foto do veículo">
+        </div>
+        <div id="thumbs" class="gallery__thumbs"></div>
+      </div>
+
+      <div class="detail__info">
+        <header class="detail__header">
+          <h2 id="title"></h2>
+          <strong id="price" class="price"></strong>
+        </header>
+        <p id="description" class="desc"></p>
+
+        <dl class="specs">
+          <div><dt>Marca</dt><dd id="brand"></dd></div>
+          <div><dt>Modelo</dt><dd id="model"></dd></div>
+          <div><dt>Ano</dt><dd id="year"></dd></div>
+          <div><dt>Quilometragem</dt><dd id="km"></dd></div>
+          <div><dt>Câmbio</dt><dd id="transmission"></dd></div>
+          <div><dt>Combustível</dt><dd id="fuel"></dd></div>
+          <div><dt>Cor</dt><dd id="color"></dd></div>
+        </dl>
+
+        <div class="cta">
+          <a id="whatsLink" class="btn primary" target="_blank" rel="noopener">Falar no WhatsApp</a>
+          <a href="index.html" class="btn ghost">Voltar ao Catálogo</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="notFound" class="empty card" hidden>
+      <p>Carro não encontrado. Volte ao <a href="index.html">catálogo</a>.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>AutoCat • Detalhes do Carro</small>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/details.js"></script>
+</body>
+</html>

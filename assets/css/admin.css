@@ -1,0 +1,6 @@
+.admin{ display:grid; gap:16px; margin-top:16px; }
+.form .actions{ display:flex; align-items:center; gap:12px; margin-top:8px; }
+.form .spacer{ flex:1; }
+.list__header{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
+.list__tools{ display:flex; align-items:center; gap:8px; }
+.actions .btn{ min-width:120px; }

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo de Carros</title>
+  <link rel="stylesheet" href="assets/css/base.css"/>
+  <link rel="stylesheet" href="assets/css/catalog.css"/>
+  <link rel="icon" href="assets/img/favicon.png"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__content">
+      <h1 class="brand">🔷 AutoCat</h1>
+      <nav class="nav">
+        <a href="index.html" class="active">Catálogo</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="filters card">
+      <div class="filters__row">
+        <input id="q" type="search" placeholder="Buscar por modelo, marca, cor..." aria-label="Buscar"/>
+        <select id="brandSelect" aria-label="Filtrar por marca">
+          <option value="">Todas as marcas</option>
+        </select>
+        <select id="yearSelect" aria-label="Filtrar por ano mínimo">
+          <option value="">Ano mínimo</option>
+        </select>
+        <select id="transmissionSelect" aria-label="Filtrar por câmbio">
+          <option value="">Câmbio</option>
+          <option value="Manual">Manual</option>
+          <option value="Automático">Automático</option>
+          <option value="CVT">CVT</option>
+        </select>
+        <select id="fuelSelect" aria-label="Filtrar por combustível">
+          <option value="">Combustível</option>
+          <option value="Flex">Flex</option>
+          <option value="Gasolina">Gasolina</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Elétrico">Elétrico</option>
+          <option value="Híbrido">Híbrido</option>
+        </select>
+      </div>
+      <div class="filters__row">
+        <input id="minPrice" type="number" min="0" step="1000" placeholder="Preço mín (R$)"/>
+        <input id="maxPrice" type="number" min="0" step="1000" placeholder="Preço máx (R$)"/>
+        <select id="sortSelect" aria-label="Ordenar">
+          <option value="recent">Mais recentes</option>
+          <option value="priceAsc">Preço: menor → maior</option>
+          <option value="priceDesc">Preço: maior → menor</option>
+          <option value="yearDesc">Ano: mais novo → mais antigo</option>
+          <option value="kmAsc">KM: menor → maior</option>
+        </select>
+        <button id="clearFilters" class="btn ghost" type="button">Limpar</button>
+      </div>
+    </section>
+
+    <section id="grid" class="grid"></section>
+
+    <template id="cardTemplate">
+      <article class="car card">
+        <a class="car__thumb__wrap" href="#">
+          <img class="car__thumb" alt="Imagem do carro"/>
+          <span class="badge">NOVO</span>
+        </a>
+        <div class="car__body">
+          <header class="car__header">
+            <h3 class="car__title"></h3>
+            <strong class="car__price"></strong>
+          </header>
+          <p class="car__meta"></p>
+          <footer class="car__footer">
+            <span class="chip year"></span>
+            <span class="chip km"></span>
+            <span class="chip fuel"></span>
+          </footer>
+        </div>
+      </article>
+    </template>
+
+    <div id="emptyState" class="empty card" hidden>
+      <p>Nenhum carro encontrado com os filtros selecionados.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>AutoCat • Catálogo de Carros • 2025-08-12</small>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/catalog.js"></script>
+</body>
+</html>
