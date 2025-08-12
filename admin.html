@@ -20,33 +20,64 @@
   </header>
 
   <main class="container admin">
+    <!-- Card 1: Configuração do Site -->
     <section class="card">
-      <h2>Cadastro / Edição de Carro</h2>
+      <h2>Configuração do Site</h2>
+      <div class="grid-3">
+        <label>Nome do site
+          <input id="brandText" placeholder="Ex: AutoCat"/>
+        </label>
+        <label>Cor Primária
+          <input type="color" id="themePrimary" value="#4f8cff"/>
+        </label>
+        <label>Fundo (BG)
+          <input type="color" id="themeBg" value="#0b0e13"/>
+        </label>
+      </div>
+      <div class="grid-3">
+        <label>Cartões (Card)
+          <input type="color" id="themeCard" value="#121721"/>
+        </label>
+        <label>Texto
+          <input type="color" id="themeText" value="#e6e9ef"/>
+        </label>
+        <label>Borda
+          <input type="color" id="themeBorder" value="#1f2430"/>
+        </label>
+      </div>
+      <div class="grid-3">
+        <label>Chip
+          <input type="color" id="themeChip" value="#1a202c"/>
+        </label>
+        <div></div><div></div>
+      </div>
+      <div class="actions">
+        <label class="btn file">Upload da Logo
+          <input type="file" id="logoInput" accept="image/*" hidden/>
+        </label>
+        <button class="btn" type="button" id="resetTheme">Restaurar padrão</button>
+        <div class="spacer"></div>
+        <div class="brandPreview">
+          <img id="brandPreview" class="brand__logo" alt="Prévia da logo"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- Card 2: Adicionar Novo Veículo -->
+    <section class="card">
+      <h2>Adicionar Novo Veículo</h2>
       <form id="carForm" class="form">
         <input type="hidden" id="carId"/>
-
         <div class="grid-2">
-          <label>Marca
-            <input id="brand" required placeholder="Ex: Toyota"/>
-          </label>
-          <label>Modelo
-            <input id="model" required placeholder="Ex: Corolla"/>
-          </label>
+          <label>Marca <input id="brand" required placeholder="Ex: Toyota"/></label>
+          <label>Modelo <input id="model" required placeholder="Ex: Corolla"/></label>
         </div>
 
         <div class="grid-4">
-          <label>Ano
-            <input id="year" type="number" required min="1950" max="2100"/>
-          </label>
-          <label>Preço (R$)
-            <input id="price" type="number" required step="500" min="0"/>
-          </label>
-          <label>KM
-            <input id="km" type="number" required step="100" min="0"/>
-          </label>
-          <label>Cor
-            <input id="color" required placeholder="Ex: Prata"/>
-          </label>
+          <label>Ano <input id="year" type="number" required min="1950" max="2100"/></label>
+          <label>Preço (R$) <input id="price" type="number" required step="500" min="0"/></label>
+          <label>KM <input id="km" type="number" required step="100" min="0"/></label>
+          <label>Cor <input id="color" required placeholder="Ex: Prata"/></label>
         </div>
 
         <div class="grid-3">
@@ -79,12 +110,8 @@
 
         <template id="tplConsultant">
           <div class="repeater__item">
-            <label>Nome
-              <input class="c-name" placeholder="Ex: João Silva"/>
-            </label>
-            <label>WhatsApp
-              <input class="c-phone" placeholder="5599999999999"/>
-            </label>
+            <label>Nome <input class="c-name" placeholder="Ex: João Silva"/></label>
+            <label>WhatsApp <input class="c-phone" placeholder="5599999999999"/></label>
             <button type="button" class="btn danger c-remove">Remover</button>
           </div>
         </template>
@@ -96,36 +123,44 @@
         <fieldset class="featuresOpt card">
           <legend>Opcionais</legend>
           <div class="features-grid">
-            <label><input type="checkbox" class="feat" value="Direção hidráulica"/> Direção hidráulica</label>
-            <label><input type="checkbox" class="feat" value="Direção elétrica"/> Direção elétrica</label>
-            <label><input type="checkbox" class="feat" value="Ar-condicionado"/> Ar-condicionado</label>
-            <label><input type="checkbox" class="feat" value="Ar digital"/> Ar digital</label>
-            <label><input type="checkbox" class="feat" value="Vidros elétricos"/> Vidros elétricos</label>
-            <label><input type="checkbox" class="feat" value="Travas elétricas"/> Travas elétricas</label>
-            <label><input type="checkbox" class="feat" value="Alarme"/> Alarme</label>
-            <label><input type="checkbox" class="feat" value="Multimídia"/> Multimídia</label>
-            <label><input type="checkbox" class="feat" value="Câmera de ré"/> Câmera de ré</label>
-            <label><input type="checkbox" class="feat" value="Sensor de estacionamento"/> Sensor de estacionamento</label>
-            <label><input type="checkbox" class="feat" value="Piloto automático"/> Piloto automático</label>
-            <label><input type="checkbox" class="feat" value="Controle de estabilidade (ESP)"/> Controle de estabilidade (ESP)</label>
-            <label><input type="checkbox" class="feat" value="Controle de tração (TCS)"/> Controle de tração (TCS)</label>
-            <label><input type="checkbox" class="feat" value="Bancos de couro"/> Bancos de couro</label>
-            <label><input type="checkbox" class="feat" value="Teto solar"/> Teto solar</label>
-            <label><input type="checkbox" class="feat" value="Farol de neblina"/> Farol de neblina</label>
-            <label><input type="checkbox" class="feat" value="Farol LED"/> Farol LED</label>
-            <label><input type="checkbox" class="feat" value="Rodas de liga leve"/> Rodas de liga leve</label>
-            <label><input type="checkbox" class="feat" value="Chave presencial (Keyless)"/> Chave presencial (Keyless)</label>
-            <label><input type="checkbox" class="feat" value="Partida start/stop"/> Partida start/stop</label>
-            <label><input type="checkbox" class="feat" value="Assistente de rampa (HSA)"/> Assistente de rampa (HSA)</label>
-            <label><input type="checkbox" class="feat" value="Tração 4x4"/> Tração 4x4</label>
-            <label><input type="checkbox" class="feat" value="Airbags frontais"/> Airbags frontais</label>
-            <label><input type="checkbox" class="feat" value="Airbags laterais"/> Airbags laterais</label>
+            <label><input type="checkbox" class="feat" value="Direção hidráulica"> Direção hidráulica</label>
+            <label><input type="checkbox" class="feat" value="Direção elétrica"> Direção elétrica</label>
+            <label><input type="checkbox" class="feat" value="Ar-condicionado"> Ar-condicionado</label>
+            <label><input type="checkbox" class="feat" value="Ar digital"> Ar digital</label>
+            <label><input type="checkbox" class="feat" value="Vidros elétricos"> Vidros elétricos</label>
+            <label><input type="checkbox" class="feat" value="Travas elétricas"> Travas elétricas</label>
+            <label><input type="checkbox" class="feat" value="Alarme"> Alarme</label>
+            <label><input type="checkbox" class="feat" value="Multimídia"> Multimídia</label>
+            <label><input type="checkbox" class="feat" value="Câmera de ré"> Câmera de ré</label>
+            <label><input type="checkbox" class="feat" value="Sensor de estacionamento"> Sensor de estacionamento</label>
+            <label><input type="checkbox" class="feat" value="Piloto automático"> Piloto automático</label>
+            <label><input type="checkbox" class="feat" value="Controle de estabilidade (ESP)"> Controle de estabilidade (ESP)</label>
+            <label><input type="checkbox" class="feat" value="Controle de tração (TCS)"> Controle de tração (TCS)</label>
+            <label><input type="checkbox" class="feat" value="Bancos de couro"> Bancos de couro</label>
+            <label><input type="checkbox" class="feat" value="Teto solar"> Teto solar</label>
+            <label><input type="checkbox" class="feat" value="Farol de neblina"> Farol de neblina</label>
+            <label><input type="checkbox" class="feat" value="Farol LED"> Farol LED</label>
+            <label><input type="checkbox" class="feat" value="Rodas de liga leve"> Rodas de liga leve</label>
+            <label><input type="checkbox" class="feat" value="Chave presencial (Keyless)"> Chave presencial (Keyless)</label>
+            <label><input type="checkbox" class="feat" value="Partida start/stop"> Partida start/stop</label>
+            <label><input type="checkbox" class="feat" value="Assistente de rampa (HSA)"> Assistente de rampa (HSA)</label>
+            <label><input type="checkbox" class="feat" value="Tração 4x4"> Tração 4x4</label>
+            <label><input type="checkbox" class="feat" value="Airbags frontais"> Airbags frontais</label>
+            <label><input type="checkbox" class="feat" value="Airbags laterais"> Airbags laterais</label>
           </div>
         </fieldset>
 
         <label>URLs das Imagens (uma por linha)
           <textarea id="images" rows="4" placeholder="https://..."></textarea>
         </label>
+
+        <div class="grid-2">
+          <label class="btn file">Selecionar arquivos / câmera
+            <input id="imagesFiles" type="file" accept="image/*" multiple capture="environment" hidden>
+          </label>
+          <div class="muted">No celular abre a câmera; no computador abre o gerenciador de arquivos. As imagens selecionadas são anexadas abaixo automaticamente.</div>
+        </div>
+        <div id="imagesPreview" class="preview"></div>
 
         <div class="actions">
           <label class="switch">
@@ -139,49 +174,7 @@
       </form>
     </section>
 
-    <section class="card">
-      <h2>Aparência e Marca</h2>
-      <div class="grid-3">
-        <label>Nome do site
-          <input id="brandText" placeholder="Ex: AutoCat"/>
-        </label>
-        <label>Cor Primária
-          <input type="color" id="themePrimary" value="#4f8cff"/>
-        </label>
-        <label>Fundo (BG)
-          <input type="color" id="themeBg" value="#0b0e13"/>
-        </label>
-      </div>
-      <div class="grid-3">
-        <label>Cartões (Card)
-          <input type="color" id="themeCard" value="#121721"/>
-        </label>
-        <label>Texto
-          <input type="color" id="themeText" value="#e6e9ef"/>
-        </label>
-        <label>Borda
-          <input type="color" id="themeBorder" value="#1f2430"/>
-        </label>
-      </div>
-      <div class="grid-3">
-        <label>Chip
-          <input type="color" id="themeChip" value="#1a202c"/>
-        </label>
-        <div></div>
-        <div></div>
-      </div>
-      <div class="actions">
-        <label class="btn file">Upload da Logo
-          <input type="file" id="logoInput" accept="image/*" hidden/>
-        </label>
-        <button class="btn" type="button" id="resetTheme">Restaurar padrão</button>
-        <div class="spacer"></div>
-        <div class="brandPreview">
-          <img id="brandPreview" class="brand__logo" alt="Prévia da logo"/>
-        </div>
-      </div>
-    </section>
-
+    <!-- Card 3: Meus Carros -->
     <section class="card">
       <header class="list__header">
         <h2>Meus Carros</h2>
