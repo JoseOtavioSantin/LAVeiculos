@@ -1,8 +1,10 @@
 import { by, all, uid } from './utils.js';
 import { seedIfEmpty, getAllCars, upsertCar, deleteCar, togglePublished, exportJson } from './db.js';
+import { setTheme, getTheme, resetTheme, setLogo, getLogo, applyBrandLogo } from './theme.js';
 import { moneyBRL } from './utils.js';
 
 seedIfEmpty();
+applyBrandLogo();
 
 const els = {
   form: by('#carForm'),
@@ -17,20 +19,106 @@ const els = {
   fuel: by('#fuel'),
   description: by('#description'),
   images: by('#images'),
-  phone: by('#phone'),
   published: by('#published'),
   resetForm: by('#resetForm'),
 
+  // list
   table: by('#carsTable tbody'),
   search: by('#searchAdmin'),
   exportJson: by('#exportJson'),
-  importJson: by('#importJson')
+  importJson: by('#importJson'),
+
+  // consultants
+  consultantsList: by('#consultantsList'),
+  addConsultant: by('#addConsultant'),
+  tplConsultant: by('#tplConsultant'),
+
+  // theme
+  thPrimary: by('#themePrimary'),
+  thBg: by('#themeBg'),
+  thCard: by('#themeCard'),
+  thText: by('#themeText'),
+  thBorder: by('#themeBorder'),
+  thChip: by('#themeChip'),
+  logoInput: by('#logoInput'),
+  logoPreview: by('#brandPreview'),
+  resetThemeBtn: by('#resetTheme')
 };
 
 let cache = getAllCars();
 
+// --- Consultants helpers
+function clearConsultants(){ els.consultantsList.innerHTML = ''; }
+function addConsultantRow(data = { name:'', phone:'' }){
+  const node = els.tplConsultant.content.cloneNode(true);
+  const wrap = node.querySelector('.repeater__item');
+  const inName = node.querySelector('.c-name');
+  const inPhone = node.querySelector('.c-phone');
+  inName.value = data.name || '';
+  inPhone.value = data.phone || '';
+  wrap.querySelector('.c-remove').addEventListener('click', () => wrap.remove());
+  els.consultantsList.appendChild(node);
+}
+
+// --- Theme init
+function initThemeControls(){
+  const cs = getComputedStyle(document.documentElement);
+  const current = { 
+    primary: getTheme().primary || cs.getPropertyValue('--primary').trim(),
+    bg: getTheme().bg || cs.getPropertyValue('--bg').trim(),
+    card: getTheme().card || cs.getPropertyValue('--card').trim(),
+    text: getTheme().text || cs.getPropertyValue('--text').trim(),
+    border: getTheme().border || cs.getPropertyValue('--border').trim(),
+    chip: getTheme().chip || cs.getPropertyValue('--chip').trim(),
+  };
+  els.thPrimary.value = current.primary.startsWith('#') ? current.primary : '#4f8cff';
+  els.thBg.value = current.bg.startsWith('#') ? current.bg : '#0b0e13';
+  els.thCard.value = current.card.startsWith('#') ? current.card : '#121721';
+  els.thText.value = current.text.startsWith('#') ? current.text : '#e6e9ef';
+  els.thBorder.value = current.border.startsWith('#') ? current.border : '#1f2430';
+  els.thChip.value = current.chip.startsWith('#') ? current.chip : '#1a202c';
+
+  const update = () => setTheme({ 
+    primary: els.thPrimary.value,
+    bg: els.thBg.value,
+    card: els.thCard.value,
+    text: els.thText.value,
+    border: els.thBorder.value,
+    chip: els.thChip.value
+  });
+
+  [els.thPrimary, els.thBg, els.thCard, els.thText, els.thBorder, els.thChip].forEach(inp => {
+    inp && inp.addEventListener('input', update);
+  });
+
+  // Logo
+  const logo = getLogo();
+  if(logo){ els.logoPreview.src = logo; els.logoPreview.hidden = false; }
+  els.logoInput.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setLogo(reader.result);
+      els.logoPreview.src = reader.result;
+      applyBrandLogo();
+      alert('Logo atualizada!');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  els.resetThemeBtn.addEventListener('click', () => {
+    resetTheme();
+  });
+}
+
 function readForm(){
   const images = els.images.value.split('\n').map(s => s.trim()).filter(Boolean);
+  const consultants = all('.repeater__item', els.consultantsList).map(item => {
+    const name = item.querySelector('.c-name').value.trim();
+    const phone = item.querySelector('.c-phone').value.trim();
+    return (name || phone) ? { name, phone } : null;
+  }).filter(Boolean);
   return {
     id: els.id.value || null,
     brand: els.brand.value.trim(),
@@ -43,7 +131,8 @@ function readForm(){
     fuel: els.fuel.value,
     description: els.description.value.trim(),
     images,
-    phone: els.phone.value.trim(),
+    phone: (consultants[0]?.phone || ''),
+    consultants,
     published: els.published.checked
   };
 }
@@ -60,12 +149,16 @@ function fillForm(c){
   els.fuel.value = c.fuel || 'Flex';
   els.description.value = c.description || '';
   els.images.value = (c.images || []).join('\n');
-  els.phone.value = c.phone || '';
+  // consultants
+  clearConsultants();
+  const cons = (c.consultants && Array.isArray(c.consultants) && c.consultants.length) ? c.consultants : (c.phone ? [{ name:'', phone:c.phone }] : []);
+  cons.forEach(addConsultantRow);
   els.published.checked = !!c.published;
 }
 
 function clearForm(){
   fillForm({});
+  clearConsultants();
 }
 
 function renderTable(){
@@ -121,6 +214,8 @@ els.importJson.addEventListener('change', async (e) => {
   }
 });
 
+els.addConsultant.addEventListener('click', () => addConsultantRow());
+
 els.table.addEventListener('click', (e) => {
   const btn = e.target.closest('button, input[type=checkbox]');
   if(!btn) return;
@@ -142,3 +237,4 @@ els.table.addEventListener('click', (e) => {
 
 // First paint
 renderTable();
+initThemeControls();

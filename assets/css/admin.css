@@ -4,3 +4,10 @@
 .list__header{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
 .list__tools{ display:flex; align-items:center; gap:8px; }
 .actions .btn{ min-width:120px; }
+
+.repeater{ display:grid; gap:8px; margin-top:8px; }
+.repeater__item{ display:grid; grid-template-columns: 1fr 1fr auto; gap:8px; align-items:end; }
+.brandPreview{ display:flex; align-items:center; gap:8px; color:#cbd5e1; }
+@media (max-width: 640px){
+  .repeater__item{ grid-template-columns: 1fr; }
+}

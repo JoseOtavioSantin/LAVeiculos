@@ -11,10 +11,9 @@
 <body>
   <header class="topbar">
     <div class="container topbar__content">
-      <h1 class="brand">🔷 AutoCat</h1>
+      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span>AutoCat</span></h1>
       <nav class="nav">
         <a href="index.html">Catálogo</a>
-        <a href="admin.html">Admin</a>
       </nav>
     </div>
   </header>
@@ -45,10 +44,7 @@
           <div><dt>Cor</dt><dd id="color"></dd></div>
         </dl>
 
-        <div class="cta">
-          <a id="whatsLink" class="btn primary" target="_blank" rel="noopener">Falar no WhatsApp</a>
-          <a href="index.html" class="btn ghost">Voltar ao Catálogo</a>
-        </div>
+        <div class="cta" id="contacts"></div>
       </div>
     </div>
 
@@ -63,6 +59,7 @@
     </div>
   </footer>
 
+  <script type="module" src="assets/js/theme.js"></script>
   <script type="module" src="assets/js/details.js"></script>
 </body>
 </html>

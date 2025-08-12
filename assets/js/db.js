@@ -13,8 +13,8 @@ const defaultData = [
     color: 'Prata',
     transmission: 'Automático',
     fuel: 'Flex',
-    phone: '5551999999999',
     description: 'Único dono, revisões em dia, multimídia, bancos de couro.',
+    consultants: [{ name:'Ana', phone:'5551999999999' }],
     images: [
       'https://images.unsplash.com/photo-1619767886558-efdc259cde1f?q=80&w=1200&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1549921296-3a6b3a66c6b0?q=80&w=1200&auto=format&fit=crop',
@@ -33,8 +33,8 @@ const defaultData = [
     color: 'Branco',
     transmission: 'Automático',
     fuel: 'Flex',
-    phone: '5551999999999',
     description: 'SUV completo, teto solar, ACC, manutenção ok.',
+    consultants: [{ name:'Bruno', phone:'5551999999999' }, { name:'Carla', phone:'5551888888888' }],
     images: [
       'https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=1200&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=1200&auto=format&fit=crop'
@@ -52,8 +52,8 @@ const defaultData = [
     color: 'Preto',
     transmission: 'Manual',
     fuel: 'Flex',
-    phone: '5551999999999',
     description: 'Econômico e confiável, ótimo para cidade.',
+    consultants: [{ name:'Dani', phone:'5551777777777' }],
     images: [
       'https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=1200&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop'

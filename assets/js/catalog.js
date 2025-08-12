@@ -1,7 +1,9 @@
 import { moneyBRL, formatKm, by, all, slugify } from './utils.js';
 import { seedIfEmpty, getAllCars } from './db.js';
+import { applyBrandLogo } from './theme.js';
 
 seedIfEmpty();
+applyBrandLogo();
 
 const state = {
   q: '',

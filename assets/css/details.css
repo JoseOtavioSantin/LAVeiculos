@@ -10,7 +10,7 @@
 .specs{ display:grid; grid-template-columns: 1fr 1fr; gap:8px 16px; margin:12px 0; }
 .specs dt{ color:#cbd5e1; }
 .specs dd{ margin:0; }
-.cta{ display:flex; gap:12px; }
+.cta{ display:flex; gap:12px; flex-wrap:wrap; }
 @media (max-width: 900px){
   .detail{ grid-template-columns: 1fr; }
   .gallery__main img{ height:300px; }

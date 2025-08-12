@@ -11,7 +11,7 @@
 <body>
   <header class="topbar">
     <div class="container topbar__content">
-      <h1 class="brand">🔷 AutoCat</h1>
+      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span>AutoCat</span></h1>
       <nav class="nav">
         <a href="index.html">Catálogo</a>
         <a href="admin.html" class="active">Admin</a>
@@ -66,10 +66,28 @@
               <option value="Híbrido">Híbrido</option>
             </select>
           </label>
-          <label>Telefone/WhatsApp
-            <input id="phone" placeholder="5599999999999"/>
-          </label>
+          <div></div>
         </div>
+
+        <section class="subsection">
+          <h3>Consultores (nome + WhatsApp)</h3>
+          <div id="consultantsList" class="repeater"></div>
+          <div class="actions">
+            <button type="button" id="addConsultant" class="btn">Adicionar consultor</button>
+          </div>
+        </section>
+
+        <template id="tplConsultant">
+          <div class="repeater__item">
+            <label>Nome
+              <input class="c-name" placeholder="Ex: João Silva"/>
+            </label>
+            <label>WhatsApp
+              <input class="c-phone" placeholder="5599999999999"/>
+            </label>
+            <button type="button" class="btn danger c-remove">Remover</button>
+          </div>
+        </template>
 
         <label>Descrição
           <textarea id="description" rows="3" placeholder="Destaques, estado, revisões, etc."></textarea>
@@ -89,6 +107,42 @@
           <button type="submit" class="btn primary">Salvar</button>
         </div>
       </form>
+    </section>
+
+    <section class="card">
+      <h2>Aparência e Marca</h2>
+      <div class="grid-3">
+        <label>Cor Primária
+          <input type="color" id="themePrimary" value="#4f8cff"/>
+        </label>
+        <label>Fundo (BG)
+          <input type="color" id="themeBg" value="#0b0e13"/>
+        </label>
+        <label>Cartões (Card)
+          <input type="color" id="themeCard" value="#121721"/>
+        </label>
+      </div>
+      <div class="grid-3">
+        <label>Texto
+          <input type="color" id="themeText" value="#e6e9ef"/>
+        </label>
+        <label>Borda
+          <input type="color" id="themeBorder" value="#1f2430"/>
+        </label>
+        <label>Chip
+          <input type="color" id="themeChip" value="#1a202c"/>
+        </label>
+      </div>
+      <div class="actions">
+        <label class="btn file">Upload da Logo
+          <input type="file" id="logoInput" accept="image/*" hidden/>
+        </label>
+        <button class="btn" type="button" id="resetTheme">Restaurar padrão</button>
+        <div class="spacer"></div>
+        <div class="brandPreview">
+          <img id="brandPreview" class="brand__logo" alt="Prévia da logo"/>
+        </div>
+      </div>
     </section>
 
     <section class="card">
@@ -125,6 +179,7 @@
     </div>
   </footer>
 
+  <script type="module" src="assets/js/theme.js"></script>
   <script type="module" src="assets/js/admin.js"></script>
 </body>
 </html>

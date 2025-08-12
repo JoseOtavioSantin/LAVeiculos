@@ -17,7 +17,8 @@ a{ color: var(--primary); text-decoration: none; }
 .container{ max-width: 1100px; margin: 0 auto; padding: 16px; }
 .topbar{ background: #0a0f19; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10; }
 .topbar__content{ display:flex; align-items:center; gap:16px; }
-.brand{ margin:0; font-size:1.25rem; }
+.brand{ margin:0; font-size:1.25rem; display:flex; align-items:center; gap:10px; }
+.brand__logo{ width:28px; height:28px; object-fit:contain; border-radius:8px; background:#0f1623; border:1px solid var(--border); padding:2px; }
 .nav{ margin-left:auto; display:flex; gap:12px; }
 .nav a{ padding:8px 12px; border-radius:12px; color:#cbd5e1; }
 .nav a.active{ background: var(--chip); color: var(--text); }
@@ -30,6 +31,7 @@ a{ color: var(--primary); text-decoration: none; }
 .btn.primary{ background: var(--primary); border-color: transparent; color: white; }
 .btn.ghost{ background: transparent; }
 .btn.file{ position:relative; overflow:hidden; }
+.btn.danger{ background: var(--danger); border-color: transparent; color: white; }
 
 input,select,textarea{ width:100%; padding:10px 12px; background:#0f1623; color:var(--text); border:1px solid var(--border); border-radius:12px; }
 label{ display:block; font-size:.9rem; color:#cbd5e1; margin-bottom:8px; }
@@ -41,9 +43,6 @@ label > input, label > select, label > textarea{ margin-top:6px; }
 .badge{ position:absolute; left:8px; top:8px; background:var(--primary); color:#fff; padding:4px 8px; font-size:.7rem; border-radius:999px; }
 .chip{ background:var(--chip); color:#cbd5e1; padding:6px 8px; border-radius:999px; font-size:.75rem; }
 .price{ font-size:1.3rem; }
-
-.topbar .brand{ display:flex; align-items:center; gap:8px; }
-.topbar .brand::after{ content:""; width:6px; height:6px; background:var(--success); border-radius:50%; box-shadow:0 0 12px var(--success); }
 
 .switch{ display:flex; align-items:center; gap:8px; }
 .switch input{ transform: scale(1.2); }

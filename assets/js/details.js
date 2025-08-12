@@ -1,5 +1,6 @@
 import { by, all, moneyBRL, formatKm } from './utils.js';
 import { findById } from './db.js';
+import { applyBrandLogo } from './theme.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
@@ -10,6 +11,7 @@ const thumbs = by('#thumbs');
 const photoMain = by('#photoMain');
 
 const car = findById(id);
+applyBrandLogo();
 
 if(!car || !car.published){
   notFound.hidden = false;
@@ -25,7 +27,22 @@ if(!car || !car.published){
   by('#transmission').textContent = car.transmission;
   by('#fuel').textContent = car.fuel;
   by('#color').textContent = car.color;
-  by('#whatsLink').href = `https://wa.me/${car.phone || ''}?text=${encodeURIComponent('Tenho interesse no '+car.brand+' '+car.model)}`;
+
+  const contactsEl = by('#contacts');
+  const contacts = Array.isArray(car.consultants) && car.consultants.length
+    ? car.consultants.filter(c => c.phone)
+    : (car.phone ? [{ name:'', phone:car.phone }] : []);
+  contacts.forEach(c => {
+    const a = document.createElement('a');
+    a.className = 'btn primary';
+    const label = c.name ? ('Falar com ' + c.name) : 'Falar no WhatsApp';
+    a.textContent = label;
+    a.target = '_blank'; a.rel = 'noopener';
+    a.href = `https://wa.me/${c.phone}?text=${encodeURIComponent('Tenho interesse no '+car.brand+' '+car.model)}`;
+    contactsEl.appendChild(a);
+  });
+  const back = document.createElement('a'); back.className='btn ghost'; back.href='index.html'; back.textContent='Voltar ao Catálogo';
+  contactsEl.appendChild(back);
 
   const imgs = car.images?.length ? car.images : ['assets/img/placeholder.jpg'];
   photoMain.src = imgs[0];
