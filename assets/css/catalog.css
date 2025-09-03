@@ -1,16 +1,159 @@
-.filters{ margin-top:16px; }
-.filters__row{ display:grid; gap:12px; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; margin-bottom:12px; }
-.filters__row:last-child{ grid-template-columns: 1fr 1fr 1fr auto; }
-@media (max-width: 900px){
-  .filters__row{ grid-template-columns: 1fr 1fr; }
-  .filters__row:last-child{ grid-template-columns: 1fr 1fr; }
+/* ------------------------- */
+/*  1. SEÇÃO DE FILTROS      */
+/* ------------------------- */
+.filters.card {
+  padding: 24px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.car{ overflow:hidden; }
-.car__thumb__wrap{ position:relative; display:block; border-bottom: 1px solid var(--border); }
-.car__thumb{ display:block; width:100%; height:180px; object-fit:cover; border-radius:12px; }
-.car__body{ padding-top:12px; }
-.car__header{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.car__title{ margin:0; font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70%; }
-.car__meta{ color: var(--muted); margin:8px 0; font-size:.9rem; }
-.car__footer{ display:flex; gap:8px; flex-wrap:wrap; }
+.filters__row {
+  display: grid;
+  /* Cria colunas responsivas que se ajustam automaticamente */
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  align-items: center;
+}
+
+.filters input,
+.filters select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.filters input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* ------------------------- */
+/*  2. GRID E CARDS DE CARRO */
+/* ------------------------- */
+.grid {
+  display: grid;
+  /* Colunas responsivas com tamanho mínimo de 300px */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.car.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Garante que a imagem não vaze das bordas */
+}
+
+.car.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.car__thumb__wrap {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.car__thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Preenche o espaço sem distorcer a imagem */
+  background-color: var(--color-background);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.car:hover .car__thumb {
+  transform: scale(1.05); /* Efeito de zoom sutil */
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: var(--color-success);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.car__body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Faz o corpo ocupar o espaço disponível */
+}
+
+.car__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.car__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.car__price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  white-space: nowrap; /* Evita que o preço quebre a linha */
+}
+
+.car__meta {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  flex-grow: 1; /* Empurra o rodapé do card para baixo */
+}
+
+.car__footer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-border);
+  padding-top: 16px;
+  margin-top: auto; /* Garante que o rodapé fique na base */
+}
+
+.chip {
+  background-color: var(--color-background);
+  color: var(--color-text-muted);
+  padding: 6px 12px;
+  border-radius: 16px; /* Formato de pílula */
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ------------------------- */
+/*  3. ESTADO DE \"VAZIO\"     */
+/* ------------------------- */
+.empty.card {
+  grid-column: 1 / -1; /* Ocupa toda a largura da grade */
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--color-text-muted);
+}
+
