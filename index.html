@@ -3,12 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo de Carros</title>
+  <title>AutoCat - Catálogo de Carros</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/base.css"/>
   <link rel="stylesheet" href="assets/css/catalog.css"/>
+
+  <!-- Favicon -->
   <link rel="icon" href="assets/img/favicon.png"/>
 </head>
 <body>
+
   <header class="topbar">
     <div class="container topbar__content">
       <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span id="brandName">AutoCat</span></h1>
@@ -21,30 +31,16 @@
   <main class="container">
     <section class="filters card">
       <div class="filters__row">
-        <input id="q" type="search" placeholder="Buscar por modelo, marca, cor..." aria-label="Buscar"/>
+        <input id="q" type="search" placeholder="Buscar por modelo, marca..." aria-label="Buscar"/>
         <select id="brandSelect" aria-label="Filtrar por marca">
           <option value="">Todas as marcas</option>
         </select>
         <select id="yearSelect" aria-label="Filtrar por ano mínimo">
           <option value="">Ano mínimo</option>
         </select>
-        <select id="transmissionSelect" aria-label="Filtrar por câmbio">
-          <option value="">Câmbio</option>
-          <option value="Manual">Manual</option>
-          <option value="Automático">Automático</option>
-          <option value="CVT">CVT</option>
-        </select>
-        <select id="fuelSelect" aria-label="Filtrar por combustível">
-          <option value="">Combustível</option>
-          <option value="Flex">Flex</option>
-          <option value="Gasolina">Gasolina</option>
-          <option value="Diesel">Diesel</option>
-          <option value="Elétrico">Elétrico</option>
-          <option value="Híbrido">Híbrido</option>
-        </select>
       </div>
       <div class="filters__row">
-        <input id="minPrice" type="number" min="0" step="1000" placeholder="Preço mín (R$)"/>
+        <input id="minPrice" type="number" min="0" step="1000" placeholder="Preço mín (R$ )"/>
         <input id="maxPrice" type="number" min="0" step="1000" placeholder="Preço máx (R$)"/>
         <select id="sortSelect" aria-label="Ordenar">
           <option value="recent">Mais recentes</option>
@@ -53,7 +49,7 @@
           <option value="yearDesc">Ano: mais novo → mais antigo</option>
           <option value="kmAsc">KM: menor → maior</option>
         </select>
-        <button id="clearFilters" class="btn ghost" type="button">Limpar</button>
+        <button id="clearFilters" class="btn ghost" type="button">Limpar Filtros</button>
       </div>
     </section>
 
@@ -87,7 +83,7 @@
 
   <footer class="footer">
     <div class="container">
-      <small id="footerBrand">AutoCat • Catálogo de Carros • 2025-08-12</small>
+      <small id="footerBrand">AutoCat • Catálogo de Carros • 2025</small>
     </div>
   </footer>
 
