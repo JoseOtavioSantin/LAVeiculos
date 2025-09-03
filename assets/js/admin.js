@@ -1,14 +1,22 @@
-import { by, all, uid } from './utils.js';
 import { seedIfEmpty, getAllCars, upsertCar, deleteCar, togglePublished, exportJson } from './db.js';
 import { setTheme, getTheme, resetTheme, setLogo, getLogo, applyBrandLogo, setBrand, getBrand, applyBrandName } from './theme.js';
 import { moneyBRL } from './utils.js';
 
+// Utilitários
+function by(sel) { return document.querySelector(sel); }
+function all(sel, parent = document) { return Array.from(parent.querySelectorAll(sel)); }
+
+// Inicialização
 seedIfEmpty();
 applyBrandLogo();
 applyBrandName();
 
+// Elementos DOM
 const els = {
+  // Formulário
   form: by('#carForm'),
+  formTitle: by('#formTitle'),
+  submitText: by('#submitText'),
   id: by('#carId'),
   brand: by('#brand'),
   model: by('#model'),
@@ -25,17 +33,22 @@ const els = {
   published: by('#published'),
   resetForm: by('#resetForm'),
 
+  // Features
   feats: all('.feat'),
 
+  // Tabela
   table: by('#carsTable tbody'),
   search: by('#searchAdmin'),
   exportJson: by('#exportJson'),
   importJson: by('#importJson'),
+  emptyTableState: by('#emptyTableState'),
 
+  // Consultores
   consultantsList: by('#consultantsList'),
   addConsultant: by('#addConsultant'),
   tplConsultant: by('#tplConsultant'),
 
+  // Tema
   thPrimary: by('#themePrimary'),
   thBg: by('#themeBg'),
   thCard: by('#themeCard'),
@@ -45,215 +58,618 @@ const els = {
   logoInput: by('#logoInput'),
   logoPreview: by('#brandPreview'),
   resetThemeBtn: by('#resetTheme'),
-  brandText: by('#brandText')
+  applyThemeBtn: by('#applyTheme'),
+  brandText: by('#brandText'),
+
+  // Stats
+  totalCarsAdmin: by('#totalCarsAdmin'),
+  publishedCars: by('#publishedCars'),
+  draftCars: by('#draftCars'),
+  totalBrandsAdmin: by('#totalBrandsAdmin')
 };
 
-let cache = getAllCars();
+// ================================
+// CLASSE PRINCIPAL DO ADMIN
+// ================================
 
-function clearConsultants(){ els.consultantsList.innerHTML = ''; }
-function addConsultantRow(data = { name:'', phone:'' }){
-  const node = els.tplConsultant.content.cloneNode(true);
-  const wrap = node.querySelector('.repeater__item');
-  const inName = node.querySelector('.c-name');
-  const inPhone = node.querySelector('.c-phone');
-  inName.value = data.name || '';
-  inPhone.value = data.phone || '';
-  wrap.querySelector('.c-remove').addEventListener('click', () => wrap.remove());
-  els.consultantsList.appendChild(node);
-}
-
-function initThemeControls(){
-  const cs = getComputedStyle(document.documentElement);
-  const current = { 
-    primary: getTheme().primary || cs.getPropertyValue('--primary').trim(),
-    bg: getTheme().bg || cs.getPropertyValue('--bg').trim(),
-    card: getTheme().card || cs.getPropertyValue('--card').trim(),
-    text: getTheme().text || cs.getPropertyValue('--text').trim(),
-    border: getTheme().border || cs.getPropertyValue('--border').trim(),
-    chip: getTheme().chip || cs.getPropertyValue('--chip').trim(),
-  };
-  els.thPrimary.value = current.primary.startsWith('#') ? current.primary : '#4f8cff';
-  els.thBg.value = current.bg.startsWith('#') ? current.bg : '#0b0e13';
-  els.thCard.value = current.card.startsWith('#') ? current.card : '#121721';
-  els.thText.value = current.text.startsWith('#') ? current.text : '#e6e9ef';
-  els.thBorder.value = current.border.startsWith('#') ? current.border : '#1f2430';
-  els.thChip.value = current.chip.startsWith('#') ? current.chip : '#1a202c';
-
-  const update = () => setTheme({ 
-    primary: els.thPrimary.value,
-    bg: els.thBg.value,
-    card: els.thCard.value,
-    text: els.thText.value,
-    border: els.thBorder.value,
-    chip: els.thChip.value
-  });
-
-  [els.thPrimary, els.thBg, els.thCard, els.thText, els.thBorder, els.thChip].forEach(inp => inp?.addEventListener('input', update));
-
-  const logo = getLogo();
-  if(logo){ els.logoPreview.src = logo; els.logoPreview.hidden = false; }
-  els.logoInput.addEventListener('change', (e) => {
-    const file = e.target.files?.[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setLogo(reader.result);
-      els.logoPreview.src = reader.result;
-      applyBrandLogo();
-      alert('Logo atualizada!');
-    };
-    reader.readAsDataURL(file);
-  });
-
-  els.brandText.value = getBrand();
-  els.brandText.addEventListener('input', (e) => setBrand(e.target.value));
-
-  els.resetThemeBtn.addEventListener('click', () => resetTheme());
-}
-
-// Images: convert selected files to data URLs and append to textarea + preview
-els.imagesFiles?.addEventListener('change', async (e) => {
-  const files = Array.from(e.target.files || []);
-  for(const f of files){
-    const reader = new FileReader();
-    reader.onload = () => {
-      const url = reader.result;
-      els.images.value += (els.images.value.trim() ? '\n' : '') + url;
-      const img = new Image(); img.src = url; img.alt = f.name;
-      els.imagesPreview.appendChild(img);
-    };
-    reader.readAsDataURL(f);
+class AdminManager {
+  constructor() {
+    this.cars = [];
+    this.filteredCars = [];
+    this.editingCarId = null;
+    this.init();
   }
-  e.target.value = '';
-});
 
-function readForm(){
-  const images = els.images.value.split('\n').map(s => s.trim()).filter(Boolean);
-  const consultants = all('.repeater__item', els.consultantsList).map(item => {
-    const name = item.querySelector('.c-name').value.trim();
-    const phone = item.querySelector('.c-phone').value.trim();
-    return (name || phone) ? { name, phone } : null;
-  }).filter(Boolean);
-  const features = els.feats.filter(i => i.checked).map(i => i.value);
-  return {
-    id: els.id.value || null,
-    brand: els.brand.value.trim(),
-    model: els.model.value.trim(),
-    year: Number(els.year.value),
-    price: Number(els.price.value),
-    km: Number(els.km.value),
-    color: els.color.value.trim(),
-    transmission: els.transmission.value,
-    fuel: els.fuel.value,
-    description: els.description.value.trim(),
-    images,
-    features,
-    phone: (consultants[0]?.phone || ''),
-    consultants,
-    published: els.published.checked
-  };
-}
-
-function fillForm(c){
-  els.id.value = c.id || '';
-  els.brand.value = c.brand || '';
-  els.model.value = c.model || '';
-  els.year.value = c.year || '';
-  els.price.value = c.price || '';
-  els.km.value = c.km || '';
-  els.color.value = c.color || '';
-  els.transmission.value = c.transmission || 'Manual';
-  els.fuel.value = c.fuel || 'Flex';
-  els.description.value = c.description || '';
-  els.images.value = (c.images || []).join('\n');
-
-  els.imagesPreview.innerHTML = '';
-  (c.images || []).forEach(src => { const img = new Image(); img.src = src; els.imagesPreview.appendChild(img); });
-
-  clearConsultants();
-  const cons = (c.consultants && Array.isArray(c.consultants) && c.consultants.length) ? c.consultants : (c.phone ? [{ name:'', phone:c.phone }] : []);
-  cons.forEach(addConsultantRow);
-
-  const set = new Set(c.features || []);
-  els.feats.forEach(inp => { inp.checked = set.has(inp.value); });
-  els.published.checked = !!c.published;
-}
-
-function clearForm(){
-  fillForm({});
-  els.feats.forEach(inp => inp.checked = false);
-}
-
-function renderTable(){
-  cache = getAllCars();
-  const q = els.search.value.toLowerCase().trim();
-  let rows = cache;
-  if(q) rows = rows.filter(c => `${c.brand} ${c.model}`.toLowerCase().includes(q));
-
-  els.table.innerHTML = rows.map(c => `
-    <tr>
-      <td><input type="checkbox" data-action="pub" data-id="${c.id}" ${c.published ? 'checked' : ''}/></td>
-      <td><a href="details.html?id=${encodeURIComponent(c.id)}" target="_blank">${c.brand} ${c.model}</a></td>
-      <td>${c.year}</td>
-      <td>${(c.km||0).toLocaleString('pt-BR')}</td>
-      <td>${moneyBRL(c.price)}</td>
-      <td>
-        <button class="btn" data-action="edit" data-id="${c.id}">Editar</button>
-        <button class="btn" data-action="del" data-id="${c.id}">Excluir</button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-els.form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const data = readForm();
-  if(!data.brand || !data.model){ alert('Marca e Modelo são obrigatórios'); return; }
-  const id = upsertCar(data);
-  clearForm();
-  renderTable();
-  alert('Carro salvo!');
-});
-
-els.resetForm.addEventListener('click', () => clearForm());
-els.search.addEventListener('input', renderTable);
-els.exportJson.addEventListener('click', exportJson);
-els.importJson.addEventListener('change', async (e) => {
-  const file = e.target.files?.[0];
-  if(!file) return;
-  const text = await file.text();
-  try{
-    const arr = JSON.parse(text);
-    if(!Array.isArray(arr)) throw new Error('JSON inválido');
-    localStorage.setItem('carsDB_v1', JSON.stringify(arr));
-    renderTable();
-    alert('Importado com sucesso!');
-  }catch(err){
-    alert('Erro ao importar: ' + err.message);
-  }finally{
-    e.target.value = '';
+  init() {
+    this.cars = getAllCars();
+    this.updateStats();
+    this.initThemeControls();
+    this.bindEvents();
+    this.renderTable();
+    this.addConsultantRow(); // Adicionar uma linha inicial
   }
-});
 
-els.addConsultant.addEventListener('click', () => addConsultantRow());
+  // ================================
+  // ESTATÍSTICAS
+  // ================================
 
-els.table.addEventListener('click', (e) => {
-  const btn = e.target.closest('button, input[type=checkbox]');
-  if(!btn) return;
-  const id = btn.dataset.id;
-  const action = btn.dataset.action || (btn.type === 'checkbox' ? 'pub' : '');
-  if(action === 'edit'){
-    const car = cache.find(c => c.id === id);
-    if(car){ fillForm(car); window.scrollTo({ top:0, behavior:'smooth' }); }
-  } else if(action === 'del'){
-    if(confirm('Deseja excluir este carro?')){
-      deleteCar(id);
-      renderTable();
+  updateStats() {
+    const published = this.cars.filter(c => c.published);
+    const drafts = this.cars.filter(c => !c.published);
+    const brands = [...new Set(this.cars.map(c => c.brand))];
+
+    if (els.totalCarsAdmin) {
+      this.animateNumber(els.totalCarsAdmin, 0, this.cars.length, 1500);
     }
-  } else if(action === 'pub'){
-    togglePublished(id, btn.checked);
+    
+    if (els.publishedCars) {
+      this.animateNumber(els.publishedCars, 0, published.length, 1200);
+    }
+    
+    if (els.draftCars) {
+      this.animateNumber(els.draftCars, 0, drafts.length, 1000);
+    }
+    
+    if (els.totalBrandsAdmin) {
+      this.animateNumber(els.totalBrandsAdmin, 0, brands.length, 800);
+    }
   }
+
+  animateNumber(element, start, end, duration) {
+    const startTime = performance.now();
+    
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function (ease-out)
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(start + (end - start) * easeOut);
+      
+      element.textContent = current;
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    requestAnimationFrame(animate);
+  }
+
+  // ================================
+  // CONTROLES DE TEMA
+  // ================================
+
+  initThemeControls() {
+    const cs = getComputedStyle(document.documentElement);
+    const current = { 
+      primary: getTheme().primary || cs.getPropertyValue('--primary').trim(),
+      bg: getTheme().bg || cs.getPropertyValue('--bg').trim(),
+      card: getTheme().card || cs.getPropertyValue('--card').trim(),
+      text: getTheme().text || cs.getPropertyValue('--text').trim(),
+      border: getTheme().border || cs.getPropertyValue('--border').trim(),
+      chip: getTheme().chip || cs.getPropertyValue('--chip').trim(),
+    };
+
+    // Definir valores iniciais
+    if (els.thPrimary) els.thPrimary.value = current.primary.startsWith('#') ? current.primary : '#667eea';
+    if (els.thBg) els.thBg.value = current.bg.startsWith('#') ? current.bg : '#f8fafc';
+    if (els.thCard) els.thCard.value = current.card.startsWith('#') ? current.card : '#ffffff';
+    if (els.thText) els.thText.value = current.text.startsWith('#') ? current.text : '#1a202c';
+    if (els.thBorder) els.thBorder.value = current.border.startsWith('#') ? current.border : '#e2e8f0';
+    if (els.thChip) els.thChip.value = current.chip.startsWith('#') ? current.chip : '#f7fafc';
+
+    // Logo
+    const logo = getLogo();
+    if (logo && els.logoPreview) {
+      els.logoPreview.src = logo;
+      els.logoPreview.style.display = 'block';
+      els.logoPreview.parentElement.querySelector('.logo-preview__placeholder').style.display = 'none';
+    }
+
+    // Brand name
+    if (els.brandText) {
+      els.brandText.value = getBrand();
+    }
+  }
+
+  applyTheme() {
+    if (!els.thPrimary) return;
+
+    const newTheme = {
+      primary: els.thPrimary.value,
+      bg: els.thBg.value,
+      card: els.thCard.value,
+      text: els.thText.value,
+      border: els.thBorder.value,
+      chip: els.thChip.value
+    };
+
+    setTheme(newTheme);
+    this.showToast('Tema aplicado com sucesso!', 'success');
+  }
+
+  // ================================
+  // CONSULTORES
+  // ================================
+
+  clearConsultants() {
+    if (els.consultantsList) {
+      els.consultantsList.innerHTML = '';
+    }
+  }
+
+  addConsultantRow(data = { name: '', phone: '' }) {
+    if (!els.tplConsultant || !els.consultantsList) return;
+
+    const node = els.tplConsultant.content.cloneNode(true);
+    const wrap = node.querySelector('.consultant-item');
+    const inName = node.querySelector('.c-name');
+    const inPhone = node.querySelector('.c-phone');
+    const removeBtn = node.querySelector('.c-remove');
+
+    if (inName) inName.value = data.name || '';
+    if (inPhone) inPhone.value = data.phone || '';
+    
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        wrap.remove();
+        this.showToast('Consultor removido', 'info');
+      });
+    }
+
+    els.consultantsList.appendChild(node);
+  }
+
+  // ================================
+  // UPLOAD DE IMAGENS
+  // ================================
+
+  handleImageUpload(files) {
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const url = reader.result;
+        
+        // Adicionar à textarea
+        if (els.images) {
+          els.images.value += (els.images.value.trim() ? '\n' : '') + url;
+        }
+        
+        // Adicionar ao preview
+        this.addImagePreview(url, file.name);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  addImagePreview(url, name) {
+    if (!els.imagesPreview) return;
+
+    const container = document.createElement('div');
+    container.className = 'preview-image';
+    
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = name;
+    
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'preview-image__remove';
+    removeBtn.innerHTML = '×';
+    removeBtn.addEventListener('click', () => {
+      // Remover da textarea
+      if (els.images) {
+        const lines = els.images.value.split('\n');
+        const filteredLines = lines.filter(line => line.trim() !== url);
+        els.images.value = filteredLines.join('\n');
+      }
+      
+      // Remover do preview
+      container.remove();
+      this.showToast('Imagem removida', 'info');
+    });
+    
+    container.appendChild(img);
+    container.appendChild(removeBtn);
+    els.imagesPreview.appendChild(container);
+  }
+
+  // ================================
+  // FORMULÁRIO
+  // ================================
+
+  readForm() {
+    const images = els.images ? els.images.value.split('\n').map(s => s.trim()).filter(Boolean) : [];
+    
+    const consultants = all('.consultant-item', els.consultantsList).map(item => {
+      const name = item.querySelector('.c-name')?.value.trim() || '';
+      const phone = item.querySelector('.c-phone')?.value.trim() || '';
+      return (name || phone) ? { name, phone } : null;
+    }).filter(Boolean);
+    
+    const features = els.feats.filter(i => i.checked).map(i => i.value);
+    
+    return {
+      id: els.id?.value || null,
+      brand: els.brand?.value.trim() || '',
+      model: els.model?.value.trim() || '',
+      year: Number(els.year?.value) || new Date().getFullYear(),
+      price: Number(els.price?.value) || 0,
+      km: Number(els.km?.value) || 0,
+      color: els.color?.value.trim() || '',
+      transmission: els.transmission?.value || '',
+      fuel: els.fuel?.value || '',
+      description: els.description?.value.trim() || '',
+      images,
+      features,
+      consultants,
+      published: els.published?.checked ?? true
+    };
+  }
+
+  writeForm(car = {}) {
+    if (els.id) els.id.value = car.id || '';
+    if (els.brand) els.brand.value = car.brand || '';
+    if (els.model) els.model.value = car.model || '';
+    if (els.year) els.year.value = car.year || '';
+    if (els.price) els.price.value = car.price || '';
+    if (els.km) els.km.value = car.km || '';
+    if (els.color) els.color.value = car.color || '';
+    if (els.transmission) els.transmission.value = car.transmission || '';
+    if (els.fuel) els.fuel.value = car.fuel || '';
+    if (els.description) els.description.value = car.description || '';
+    if (els.images) els.images.value = (car.images || []).join('\n');
+    if (els.published) els.published.checked = car.published ?? true;
+
+    // Features
+    els.feats.forEach(feat => {
+      feat.checked = (car.features || []).includes(feat.value);
+    });
+
+    // Consultores
+    this.clearConsultants();
+    (car.consultants || [{ name: '', phone: '' }]).forEach(c => this.addConsultantRow(c));
+
+    // Preview de imagens
+    if (els.imagesPreview) {
+      els.imagesPreview.innerHTML = '';
+      (car.images || []).forEach((url, index) => {
+        this.addImagePreview(url, `Imagem ${index + 1}`);
+      });
+    }
+
+    // Atualizar título do formulário
+    this.editingCarId = car.id || null;
+    if (els.formTitle) {
+      els.formTitle.textContent = car.id ? 'Editar Veículo' : 'Adicionar Novo Veículo';
+    }
+    if (els.submitText) {
+      els.submitText.textContent = car.id ? 'Atualizar' : 'Salvar';
+    }
+  }
+
+  resetForm() {
+    this.writeForm();
+    this.showToast('Formulário limpo', 'info');
+  }
+
+  submitForm(e) {
+    e.preventDefault();
+    
+    const data = this.readForm();
+    
+    // Validação básica
+    if (!data.brand || !data.model || !data.year || !data.price) {
+      this.showToast('Preencha todos os campos obrigatórios', 'error');
+      return;
+    }
+
+    try {
+      upsertCar(data);
+      this.cars = getAllCars();
+      this.renderTable();
+      this.updateStats();
+      this.resetForm();
+      
+      const message = data.id ? 'Veículo atualizado com sucesso!' : 'Veículo adicionado com sucesso!';
+      this.showToast(message, 'success');
+    } catch (error) {
+      console.error('Erro ao salvar:', error);
+      this.showToast('Erro ao salvar veículo', 'error');
+    }
+  }
+
+  // ================================
+  // TABELA
+  // ================================
+
+  renderTable() {
+    if (!els.table) return;
+
+    const cars = this.getFilteredCars();
+    els.table.innerHTML = '';
+
+    // Mostrar/esconder estado vazio
+    if (els.emptyTableState) {
+      els.emptyTableState.hidden = cars.length > 0;
+    }
+
+    cars.forEach(car => {
+      const row = document.createElement('tr');
+      
+      // Status
+      const statusCell = document.createElement('td');
+      const statusBadge = document.createElement('span');
+      statusBadge.className = `status-badge status-badge--${car.published ? 'published' : 'draft'}`;
+      statusBadge.innerHTML = `
+        <span class="status-badge__icon">${car.published ? '✓' : '📝'}</span>
+        ${car.published ? 'Publicado' : 'Rascunho'}
+      `;
+      statusCell.appendChild(statusBadge);
+      
+      // Veículo
+      const vehicleCell = document.createElement('td');
+      vehicleCell.innerHTML = `<strong>${car.brand} ${car.model}</strong><br><small>${car.color}</small>`;
+      
+      // Ano
+      const yearCell = document.createElement('td');
+      yearCell.textContent = car.year;
+      
+      // KM
+      const kmCell = document.createElement('td');
+      kmCell.textContent = car.km ? `${car.km.toLocaleString('pt-BR')} km` : '0 km';
+      
+      // Preço
+      const priceCell = document.createElement('td');
+      priceCell.innerHTML = `<strong>${moneyBRL(car.price)}</strong>`;
+      
+      // Ações
+      const actionsCell = document.createElement('td');
+      actionsCell.className = 'table-actions-cell';
+      
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn btn--secondary btn--sm';
+      editBtn.innerHTML = '<span class="btn__icon">✏️</span> Editar';
+      editBtn.addEventListener('click', () => this.editCar(car.id));
+      
+      const toggleBtn = document.createElement('button');
+      toggleBtn.className = `btn btn--${car.published ? 'ghost' : 'primary'} btn--sm`;
+      toggleBtn.innerHTML = `<span class="btn__icon">${car.published ? '👁️' : '📢'}</span> ${car.published ? 'Ocultar' : 'Publicar'}`;
+      toggleBtn.addEventListener('click', () => this.toggleCarPublished(car.id));
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn--danger btn--sm';
+      deleteBtn.innerHTML = '<span class="btn__icon">🗑️</span> Excluir';
+      deleteBtn.addEventListener('click', () => this.deleteCar(car.id));
+      
+      actionsCell.appendChild(editBtn);
+      actionsCell.appendChild(toggleBtn);
+      actionsCell.appendChild(deleteBtn);
+      
+      row.appendChild(statusCell);
+      row.appendChild(vehicleCell);
+      row.appendChild(yearCell);
+      row.appendChild(kmCell);
+      row.appendChild(priceCell);
+      row.appendChild(actionsCell);
+      
+      els.table.appendChild(row);
+    });
+  }
+
+  getFilteredCars() {
+    const query = els.search?.value.toLowerCase() || '';
+    
+    if (!query) return this.cars;
+    
+    return this.cars.filter(car => 
+      `${car.brand} ${car.model} ${car.color}`.toLowerCase().includes(query)
+    );
+  }
+
+  editCar(id) {
+    const car = this.cars.find(c => c.id === id);
+    if (car) {
+      this.writeForm(car);
+      // Scroll para o formulário
+      els.form?.scrollIntoView({ behavior: 'smooth' });
+      this.showToast('Carregando dados para edição...', 'info');
+    }
+  }
+
+  toggleCarPublished(id) {
+    try {
+      togglePublished(id);
+      this.cars = getAllCars();
+      this.renderTable();
+      this.updateStats();
+      this.showToast('Status atualizado!', 'success');
+    } catch (error) {
+      console.error('Erro ao alterar status:', error);
+      this.showToast('Erro ao alterar status', 'error');
+    }
+  }
+
+  deleteCar(id) {
+    const car = this.cars.find(c => c.id === id);
+    if (!car) return;
+
+    if (confirm(`Tem certeza que deseja excluir o ${car.brand} ${car.model}?`)) {
+      try {
+        deleteCar(id);
+        this.cars = getAllCars();
+        this.renderTable();
+        this.updateStats();
+        this.showToast('Veículo excluído!', 'success');
+      } catch (error) {
+        console.error('Erro ao excluir:', error);
+        this.showToast('Erro ao excluir veículo', 'error');
+      }
+    }
+  }
+
+  // ================================
+  // IMPORT/EXPORT
+  // ================================
+
+  exportData() {
+    try {
+      exportJson();
+      this.showToast('Dados exportados!', 'success');
+    } catch (error) {
+      console.error('Erro ao exportar:', error);
+      this.showToast('Erro ao exportar dados', 'error');
+    }
+  }
+
+  importData(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        localStorage.setItem('autocat_cars_v1', JSON.stringify(data));
+        this.cars = getAllCars();
+        this.renderTable();
+        this.updateStats();
+        this.showToast('Dados importados com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao importar:', error);
+        this.showToast('Erro ao importar dados', 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ================================
+  // EVENTOS
+  // ================================
+
+  bindEvents() {
+    // Formulário
+    els.form?.addEventListener('submit', (e) => this.submitForm(e));
+    els.resetForm?.addEventListener('click', () => this.resetForm());
+
+    // Consultores
+    els.addConsultant?.addEventListener('click', () => {
+      this.addConsultantRow();
+      this.showToast('Consultor adicionado', 'info');
+    });
+
+    // Upload de imagens
+    els.imagesFiles?.addEventListener('change', (e) => {
+      if (e.target.files?.length) {
+        this.handleImageUpload(e.target.files);
+        e.target.value = ''; // Reset input
+      }
+    });
+
+    // Busca na tabela
+    els.search?.addEventListener('input', () => this.renderTable());
+
+    // Import/Export
+    els.exportJson?.addEventListener('click', () => this.exportData());
+    els.importJson?.addEventListener('change', (e) => {
+      if (e.target.files?.[0]) {
+        this.importData(e.target.files[0]);
+        e.target.value = ''; // Reset input
+      }
+    });
+
+    // Tema
+    els.applyThemeBtn?.addEventListener('click', () => this.applyTheme());
+    els.resetThemeBtn?.addEventListener('click', () => {
+      if (confirm('Tem certeza que deseja restaurar o tema padrão?')) {
+        resetTheme();
+      }
+    });
+
+    // Logo
+    els.logoInput?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        setLogo(reader.result);
+        if (els.logoPreview) {
+          els.logoPreview.src = reader.result;
+          els.logoPreview.style.display = 'block';
+          els.logoPreview.parentElement.querySelector('.logo-preview__placeholder').style.display = 'none';
+        }
+        applyBrandLogo();
+        this.showToast('Logo atualizada!', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Brand name
+    els.brandText?.addEventListener('input', (e) => {
+      setBrand(e.target.value);
+      applyBrandName();
+    });
+  }
+
+  // ================================
+  // TOAST NOTIFICATIONS
+  // ================================
+
+  showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${type}`;
+    toast.textContent = message;
+    
+    Object.assign(toast.style, {
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      background: type === 'success' ? 'var(--accent-success)' : 
+                  type === 'error' ? 'var(--accent-danger)' : 
+                  'var(--accent-primary)',
+      color: 'white',
+      padding: '12px 20px',
+      borderRadius: 'var(--radius-md)',
+      boxShadow: 'var(--shadow-lg)',
+      zIndex: '1000',
+      transform: 'translateX(100%)',
+      transition: 'transform 0.3s ease',
+      maxWidth: '300px',
+      fontSize: '0.9rem',
+      fontWeight: '500'
+    });
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)';
+    }, 10);
+    
+    setTimeout(() => {
+      toast.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        if (document.body.contains(toast)) {
+          document.body.removeChild(toast);
+        }
+      }, 300);
+    }, 3000);
+  }
+}
+
+// ================================
+// INICIALIZAÇÃO
+// ================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.adminManager = new AdminManager();
 });
 
-renderTable();
-initThemeControls();
+// Fallback para compatibilidade
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!window.adminManager) {
+      window.adminManager = new AdminManager();
+    }
+  });
+} else {
+  window.adminManager = new AdminManager();
+}
+
