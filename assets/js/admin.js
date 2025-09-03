@@ -710,18 +710,5 @@ class AdminManager {
 // INICIALIZAÇÃO
 // ================================
 
-document.addEventListener('DOMContentLoaded', () => {
-  window.adminManager = new AdminManager();
-});
-
-// Fallback para compatibilidade
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!window.adminManager) {
-      window.adminManager = new AdminManager();
-    }
-  });
-} else {
-  window.adminManager = new AdminManager();
-}
+window.adminManager = new AdminManager();
 
