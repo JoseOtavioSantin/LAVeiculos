@@ -13,10 +13,14 @@ applyBrandName();
 
 // Elementos DOM
 const els = {
+  // Modal
+  carModal: by('#carModal'),
+  modalTitle: by('#modalTitle'),
+  closeCarModal: by('#closeCarModal'),
+  addCarBtn: by('#addCarBtn'),
+
   // Formulário
   form: by('#carForm'),
-  formTitle: by('#formTitle'),
-  submitText: by('#submitText'),
   id: by('#carId'),
   brand: by('#brand'),
   model: by('#model'),
@@ -32,6 +36,7 @@ const els = {
   imagesPreview: by('#imagesPreview'),
   published: by('#published'),
   resetForm: by('#resetForm'),
+  submitText: by('#submitText'),
 
   // Features
   feats: all('.feat'),
@@ -87,6 +92,42 @@ class AdminManager {
     this.bindEvents();
     this.renderTable();
     this.addConsultantRow(); // Adicionar uma linha inicial
+  }
+
+  // ================================
+  // MODAL
+  // ================================
+
+  openModal(car = null) {
+    this.editingCarId = car?.id || null;
+    
+    if (els.modalTitle) {
+      els.modalTitle.textContent = car ? 'Editar Veículo' : 'Adicionar Novo Veículo';
+    }
+    
+    if (els.submitText) {
+      els.submitText.textContent = car ? 'Atualizar' : 'Salvar';
+    }
+    
+    this.writeForm(car);
+    
+    if (els.carModal) {
+      els.carModal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      
+      // Focar no primeiro campo
+      setTimeout(() => {
+        els.brand?.focus();
+      }, 100);
+    }
+  }
+
+  closeModal() {
+    if (els.carModal) {
+      els.carModal.hidden = true;
+      document.body.style.overflow = '';
+      this.editingCarId = null;
+    }
   }
 
   // ================================
@@ -164,7 +205,8 @@ class AdminManager {
     if (logo && els.logoPreview) {
       els.logoPreview.src = logo;
       els.logoPreview.style.display = 'block';
-      els.logoPreview.parentElement.querySelector('.logo-preview__placeholder').style.display = 'none';
+      const placeholder = els.logoPreview.parentElement.querySelector('.logo-preview__placeholder');
+      if (placeholder) placeholder.style.display = 'none';
     }
 
     // Brand name
@@ -328,7 +370,8 @@ class AdminManager {
 
     // Consultores
     this.clearConsultants();
-    (car.consultants || [{ name: '', phone: '' }]).forEach(c => this.addConsultantRow(c));
+    const consultants = car.consultants || [{ name: '', phone: '' }];
+    consultants.forEach(c => this.addConsultantRow(c));
 
     // Preview de imagens
     if (els.imagesPreview) {
@@ -336,15 +379,6 @@ class AdminManager {
       (car.images || []).forEach((url, index) => {
         this.addImagePreview(url, `Imagem ${index + 1}`);
       });
-    }
-
-    // Atualizar título do formulário
-    this.editingCarId = car.id || null;
-    if (els.formTitle) {
-      els.formTitle.textContent = car.id ? 'Editar Veículo' : 'Adicionar Novo Veículo';
-    }
-    if (els.submitText) {
-      els.submitText.textContent = car.id ? 'Atualizar' : 'Salvar';
     }
   }
 
@@ -369,7 +403,7 @@ class AdminManager {
       this.cars = getAllCars();
       this.renderTable();
       this.updateStats();
-      this.resetForm();
+      this.closeModal();
       
       const message = data.id ? 'Veículo atualizado com sucesso!' : 'Veículo adicionado com sucesso!';
       this.showToast(message, 'success');
@@ -470,9 +504,7 @@ class AdminManager {
   editCar(id) {
     const car = this.cars.find(c => c.id === id);
     if (car) {
-      this.writeForm(car);
-      // Scroll para o formulário
-      els.form?.scrollIntoView({ behavior: 'smooth' });
+      this.openModal(car);
       this.showToast('Carregando dados para edição...', 'info');
     }
   }
@@ -545,6 +577,24 @@ class AdminManager {
   // ================================
 
   bindEvents() {
+    // Modal
+    els.addCarBtn?.addEventListener('click', () => this.openModal());
+    els.closeCarModal?.addEventListener('click', () => this.closeModal());
+    
+    // Fechar modal clicando no backdrop
+    els.carModal?.addEventListener('click', (e) => {
+      if (e.target === els.carModal) {
+        this.closeModal();
+      }
+    });
+    
+    // Fechar modal com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !els.carModal?.hidden) {
+        this.closeModal();
+      }
+    });
+
     // Formulário
     els.form?.addEventListener('submit', (e) => this.submitForm(e));
     els.resetForm?.addEventListener('click', () => this.resetForm());
@@ -580,6 +630,7 @@ class AdminManager {
     els.resetThemeBtn?.addEventListener('click', () => {
       if (confirm('Tem certeza que deseja restaurar o tema padrão?')) {
         resetTheme();
+        this.showToast('Tema restaurado!', 'success');
       }
     });
 
@@ -594,7 +645,8 @@ class AdminManager {
         if (els.logoPreview) {
           els.logoPreview.src = reader.result;
           els.logoPreview.style.display = 'block';
-          els.logoPreview.parentElement.querySelector('.logo-preview__placeholder').style.display = 'none';
+          const placeholder = els.logoPreview.parentElement.querySelector('.logo-preview__placeholder');
+          if (placeholder) placeholder.style.display = 'none';
         }
         applyBrandLogo();
         this.showToast('Logo atualizada!', 'success');
@@ -629,7 +681,7 @@ class AdminManager {
       padding: '12px 20px',
       borderRadius: 'var(--radius-md)',
       boxShadow: 'var(--shadow-lg)',
-      zIndex: '1000',
+      zIndex: '1001',
       transform: 'translateX(100%)',
       transition: 'transform 0.3s ease',
       maxWidth: '300px',

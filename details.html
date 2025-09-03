@@ -3,68 +3,328 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detalhes do Carro</title>
+  <title>Detalhes do Carro • AutoCat</title>
+
+  <!-- Google Fonts: Inter + Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/base.css"/>
   <link rel="stylesheet" href="assets/css/details.css"/>
+
+  <!-- Favicon -->
   <link rel="icon" href="assets/img/favicon.png"/>
 </head>
 <body>
+
   <header class="topbar">
     <div class="container topbar__content">
-      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span id="brandName">AutoCat</span></h1>
+      <h1 class="brand">
+        <div class="brand__icon">🚗</div>
+        <span id="brandName">AutoCat</span>
+      </h1>
       <nav class="nav">
-        <a href="index.html">Catálogo</a>
+        <a href="index.html" class="nav__link">
+          <span class="nav__icon">🏠</span>
+          Catálogo
+        </a>
+        <a href="admin.html" class="nav__link">
+          <span class="nav__icon">⚙️</span>
+          Admin
+        </a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+          <span class="theme-toggle__icon">🌙</span>
+        </button>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <div id="detail" class="detail card" hidden>
-      <div class="gallery">
-        <div class="gallery__main">
-          <img id="photoMain" alt="Foto do veículo">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="index.html" class="breadcrumb__link">
+        <span class="breadcrumb__icon">🏠</span>
+        Catálogo
+      </a>
+      <span class="breadcrumb__separator">›</span>
+      <span class="breadcrumb__current" id="breadcrumbTitle">Detalhes do Veículo</span>
+    </nav>
+
+    <!-- Detalhes do Carro -->
+    <div id="detail" class="detail" hidden>
+      
+      <!-- Hero Section -->
+      <section class="hero-detail glass-card">
+        <div class="hero-detail__content">
+          <div class="hero-detail__header">
+            <h1 id="title" class="hero-detail__title"></h1>
+            <div class="hero-detail__badges">
+              <span class="badge badge--new" id="newBadge">NOVO</span>
+              <button class="favorite-btn" id="favoriteBtn" aria-label="Favoritar">
+                <span class="favorite-btn__icon">🤍</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="hero-detail__price">
+            <strong id="price" class="price-display"></strong>
+            <span class="price-label">à vista</span>
+          </div>
+          
+          <div class="hero-detail__summary">
+            <div class="summary-item">
+              <span class="summary-item__icon">📅</span>
+              <span class="summary-item__value" id="yearSummary"></span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__icon">🛣️</span>
+              <span class="summary-item__value" id="kmSummary"></span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__icon">⛽</span>
+              <span class="summary-item__value" id="fuelSummary"></span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__icon">🎨</span>
+              <span class="summary-item__value" id="colorSummary"></span>
+            </div>
+          </div>
         </div>
-        <div id="thumbs" class="gallery__thumbs"></div>
+      </section>
+
+      <!-- Gallery -->
+      <section class="gallery-section glass-card">
+        <div class="gallery">
+          <div class="gallery__main">
+            <img id="photoMain" class="gallery__main-image" alt="Foto do veículo">
+            <div class="gallery__controls">
+              <button class="gallery__control gallery__control--prev" id="prevImage">
+                <span class="gallery__control-icon">‹</span>
+              </button>
+              <button class="gallery__control gallery__control--next" id="nextImage">
+                <span class="gallery__control-icon">›</span>
+              </button>
+            </div>
+            <div class="gallery__counter">
+              <span id="imageCounter">1 / 1</span>
+            </div>
+          </div>
+          
+          <div id="thumbs" class="gallery__thumbs"></div>
+        </div>
+      </section>
+
+      <!-- Informações Detalhadas -->
+      <div class="detail-grid">
+        
+        <!-- Especificações -->
+        <section class="specs-section glass-card">
+          <div class="section-header">
+            <h3 class="section-title">
+              <span class="section-icon">📋</span>
+              Especificações
+            </h3>
+          </div>
+          
+          <dl class="specs-list">
+            <div class="spec-item">
+              <dt class="spec-item__label">Marca</dt>
+              <dd class="spec-item__value" id="brand"></dd>
+            </div>
+            <div class="spec-item">
+              <dt class="spec-item__label">Modelo</dt>
+              <dd class="spec-item__value" id="model"></dd>
+            </div>
+            <div class="spec-item">
+              <dt class="spec-item__label">Ano</dt>
+              <dd class="spec-item__value" id="year"></dd>
+            </div>
+            <div class="spec-item">
+              <dt class="spec-item__label">Quilometragem</dt>
+              <dd class="spec-item__value" id="km"></dd>
+            </div>
+            <div class="spec-item">
+              <dt class="spec-item__label">Câmbio</dt>
+              <dd class="spec-item__value" id="transmission"></dd>
+            </div>
+            <div class="spec-item">
+              <dt class="spec-item__label">Combustível</dt>
+              <dd class="spec-item__value" id="fuel"></dd>
+            </div>
+            <div class="spec-item">
+              <dt class="spec-item__label">Cor</dt>
+              <dd class="spec-item__value" id="color"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <!-- Descrição -->
+        <section class="description-section glass-card">
+          <div class="section-header">
+            <h3 class="section-title">
+              <span class="section-icon">📝</span>
+              Descrição
+            </h3>
+          </div>
+          
+          <div class="description-content">
+            <p id="description" class="description-text"></p>
+          </div>
+        </section>
+
+        <!-- Opcionais -->
+        <section class="features-section glass-card">
+          <div class="section-header">
+            <h3 class="section-title">
+              <span class="section-icon">⭐</span>
+              Opcionais
+            </h3>
+          </div>
+          
+          <ul id="features" class="features-list"></ul>
+        </section>
+
+        <!-- Contato -->
+        <section class="contact-section glass-card">
+          <div class="section-header">
+            <h3 class="section-title">
+              <span class="section-icon">💬</span>
+              Entre em Contato
+            </h3>
+            <div class="section-subtitle">Fale com nossos consultores</div>
+          </div>
+          
+          <div id="contacts" class="contacts-list"></div>
+          
+          <div class="contact-actions">
+            <button class="btn btn--primary btn--large" id="whatsappBtn">
+              <span class="btn__icon">📱</span>
+              Chamar no WhatsApp
+            </button>
+            <button class="btn btn--secondary btn--large" id="shareBtn">
+              <span class="btn__icon">📤</span>
+              Compartilhar
+            </button>
+          </div>
+        </section>
       </div>
 
-      <div class="detail__info">
-        <header class="detail__header">
-          <h2 id="title"></h2>
-          <strong id="price" class="price"></strong>
-        </header>
-        <p id="description" class="desc"></p>
-
-        <dl class="specs">
-          <div><dt>Marca</dt><dd id="brand"></dd></div>
-          <div><dt>Modelo</dt><dd id="model"></dd></div>
-          <div><dt>Ano</dt><dd id="year"></dd></div>
-          <div><dt>Quilometragem</dt><dd id="km"></dd></div>
-          <div><dt>Câmbio</dt><dd id="transmission"></dd></div>
-          <div><dt>Combustível</dt><dd id="fuel"></dd></div>
-          <div><dt>Cor</dt><dd id="color"></dd></div>
-        </dl>
-
-        <div class="featuresWrap">
-          <h3>Opcionais</h3>
-          <ul id="features" class="features"></ul>
-        </div>
-
-        <div class="cta" id="contacts"></div>
+      <!-- Ações Flutuantes -->
+      <div class="floating-actions">
+        <button class="floating-btn floating-btn--primary" id="floatingWhatsapp">
+          <span class="floating-btn__icon">📱</span>
+        </button>
+        <button class="floating-btn floating-btn--secondary" id="floatingShare">
+          <span class="floating-btn__icon">📤</span>
+        </button>
+        <button class="floating-btn floating-btn--ghost" id="floatingBack">
+          <span class="floating-btn__icon">←</span>
+        </button>
       </div>
     </div>
 
-    <div id="notFound" class="empty card" hidden>
-      <p>Carro não encontrado. Volte ao <a href="index.html">catálogo</a>.</p>
+    <!-- Estado de Não Encontrado -->
+    <div id="notFound" class="not-found glass-card" hidden>
+      <div class="not-found__icon">🔍</div>
+      <h2 class="not-found__title">Veículo não encontrado</h2>
+      <p class="not-found__text">
+        O veículo que você está procurando não foi encontrado ou pode ter sido removido.
+      </p>
+      <div class="not-found__actions">
+        <a href="index.html" class="btn btn--primary">
+          <span class="btn__icon">🏠</span>
+          Voltar ao Catálogo
+        </a>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+      <div class="loading__spinner"></div>
+      <p class="loading__text">Carregando detalhes...</p>
     </div>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <small id="footerBrand">AutoCat • Detalhes do Carro</small>
+      <div class="footer__content">
+        <div class="footer__brand">
+          <div class="brand">
+            <div class="brand__icon">🚗</div>
+            <span id="footerBrand">AutoCat</span>
+          </div>
+          <p class="footer__description">
+            Encontre o carro dos seus sonhos
+          </p>
+        </div>
+        
+        <div class="footer__links">
+          <div class="footer__section">
+            <h4 class="footer__section-title">Navegação</h4>
+            <ul class="footer__list">
+              <li><a href="index.html">Catálogo</a></li>
+              <li><a href="admin.html">Administração</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer__bottom">
+        <small>&copy; 2025 AutoCat. Todos os direitos reservados.</small>
+      </div>
     </div>
   </footer>
+
+  <!-- Modal de Compartilhamento -->
+  <div id="shareModal" class="modal" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__content glass-card">
+      <div class="modal__header">
+        <h3 class="modal__title">Compartilhar Veículo</h3>
+        <button class="modal__close" id="closeShareModal">
+          <span class="modal__close-icon">×</span>
+        </button>
+      </div>
+      
+      <div class="modal__body">
+        <div class="share-options">
+          <button class="share-option" id="shareWhatsapp">
+            <span class="share-option__icon">📱</span>
+            <span class="share-option__label">WhatsApp</span>
+          </button>
+          <button class="share-option" id="shareFacebook">
+            <span class="share-option__icon">📘</span>
+            <span class="share-option__label">Facebook</span>
+          </button>
+          <button class="share-option" id="shareTwitter">
+            <span class="share-option__icon">🐦</span>
+            <span class="share-option__label">Twitter</span>
+          </button>
+          <button class="share-option" id="copyLink">
+            <span class="share-option__icon">🔗</span>
+            <span class="share-option__label">Copiar Link</span>
+          </button>
+        </div>
+        
+        <div class="share-url">
+          <label class="share-url__label">Link do veículo:</label>
+          <div class="share-url__input-group">
+            <input type="text" class="share-url__input" id="shareUrl" readonly>
+            <button class="btn btn--secondary btn--sm" id="copyUrlBtn">
+              <span class="btn__icon">📋</span>
+              Copiar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="assets/js/theme.js"></script>
   <script type="module" src="assets/js/details.js"></script>
 </body>
 </html>
+

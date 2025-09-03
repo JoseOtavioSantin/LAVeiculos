@@ -176,328 +176,41 @@
       </div>
     </section>
 
-    <!-- Adicionar Novo Veículo -->
+    <!-- Gerenciar Veículos -->
     <section class="admin-section glass-card">
       <div class="section-header">
         <h3 class="section-title">
-          <span class="section-icon">➕</span>
-          <span id="formTitle">Adicionar Novo Veículo</span>
+          <span class="section-icon">🚗</span>
+          Gerenciar Veículos
         </h3>
-        <div class="section-subtitle">Preencha as informações do veículo</div>
-      </div>
-      
-      <form id="carForm" class="car-form">
-        <input type="hidden" id="carId"/>
-        
-        <!-- Informações Básicas -->
-        <div class="form-section">
-          <h4 class="form-section__title">Informações Básicas</h4>
-          <div class="form-grid">
-            <div class="input-group">
-              <label for="brand" class="input-group__label">Marca *</label>
-              <input id="brand" class="input-group__input" required placeholder="Ex: Toyota"/>
-            </div>
-            
-            <div class="input-group">
-              <label for="model" class="input-group__label">Modelo *</label>
-              <input id="model" class="input-group__input" required placeholder="Ex: Corolla"/>
-            </div>
-            
-            <div class="input-group">
-              <label for="year" class="input-group__label">Ano *</label>
-              <input id="year" type="number" class="input-group__input" required min="1950" max="2100"/>
-            </div>
-            
-            <div class="input-group">
-              <label for="color" class="input-group__label">Cor *</label>
-              <input id="color" class="input-group__input" required placeholder="Ex: Prata"/>
-            </div>
-          </div>
-        </div>
-
-        <!-- Especificações Técnicas -->
-        <div class="form-section">
-          <h4 class="form-section__title">Especificações Técnicas</h4>
-          <div class="form-grid">
-            <div class="input-group">
-              <label for="price" class="input-group__label">Preço (R$) *</label>
-              <input id="price" type="number" class="input-group__input" required step="500" min="0"/>
-            </div>
-            
-            <div class="input-group">
-              <label for="km" class="input-group__label">Quilometragem *</label>
-              <input id="km" type="number" class="input-group__input" required step="100" min="0"/>
-            </div>
-            
-            <div class="input-group">
-              <label for="transmission" class="input-group__label">Câmbio *</label>
-              <select id="transmission" class="input-group__select" required>
-                <option value="">Selecione...</option>
-                <option value="Manual">Manual</option>
-                <option value="Automático">Automático</option>
-                <option value="CVT">CVT</option>
-              </select>
-            </div>
-            
-            <div class="input-group">
-              <label for="fuel" class="input-group__label">Combustível *</label>
-              <select id="fuel" class="input-group__select" required>
-                <option value="">Selecione...</option>
-                <option value="Flex">Flex</option>
-                <option value="Gasolina">Gasolina</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Elétrico">Elétrico</option>
-                <option value="Híbrido">Híbrido</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Descrição -->
-        <div class="form-section">
-          <h4 class="form-section__title">Descrição</h4>
-          <div class="input-group">
-            <label for="description" class="input-group__label">Descrição do Veículo</label>
-            <textarea id="description" class="input-group__textarea" rows="4" placeholder="Destaques, estado, revisões, etc."></textarea>
-          </div>
-        </div>
-
-        <!-- Consultores -->
-        <div class="form-section">
-          <div class="form-section__header">
-            <h4 class="form-section__title">Consultores</h4>
-            <button type="button" id="addConsultant" class="btn btn--secondary btn--sm">
-              <span class="btn__icon">➕</span>
-              Adicionar
-            </button>
-          </div>
-          <div id="consultantsList" class="consultants-list"></div>
-        </div>
-
-        <template id="tplConsultant">
-          <div class="consultant-item glass-card">
-            <div class="consultant-item__content">
-              <div class="input-group">
-                <label class="input-group__label">Nome</label>
-                <input class="c-name input-group__input" placeholder="Ex: João Silva"/>
-              </div>
-              <div class="input-group">
-                <label class="input-group__label">WhatsApp</label>
-                <input class="c-phone input-group__input" placeholder="5511999999999"/>
-              </div>
-            </div>
-            <button type="button" class="btn btn--danger btn--sm c-remove">
-              <span class="btn__icon">🗑️</span>
-              Remover
-            </button>
-          </div>
-        </template>
-
-        <!-- Opcionais -->
-        <div class="form-section">
-          <h4 class="form-section__title">Opcionais</h4>
-          <div class="features-grid">
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Direção hidráulica">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Direção hidráulica</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Direção elétrica">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Direção elétrica</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Ar-condicionado">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Ar-condicionado</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Ar digital">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Ar digital</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Vidros elétricos">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Vidros elétricos</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Travas elétricas">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Travas elétricas</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Alarme">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Alarme</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Multimídia">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Multimídia</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Câmera de ré">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Câmera de ré</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Sensor de estacionamento">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Sensor de estacionamento</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Piloto automático">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Piloto automático</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Controle de estabilidade (ESP)">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Controle de estabilidade (ESP)</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Controle de tração (TCS)">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Controle de tração (TCS)</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Bancos de couro">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Bancos de couro</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Teto solar">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Teto solar</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Farol de neblina">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Farol de neblina</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Farol LED">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Farol LED</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Rodas de liga leve">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Rodas de liga leve</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Chave presencial (Keyless)">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Chave presencial (Keyless)</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Partida start/stop">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Partida start/stop</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Assistente de rampa (HSA)">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Assistente de rampa (HSA)</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Tração 4x4">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Tração 4x4</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Airbags frontais">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Airbags frontais</span>
-            </label>
-            <label class="feature-checkbox">
-              <input type="checkbox" class="feat" value="Airbags laterais">
-              <span class="feature-checkbox__checkmark"></span>
-              <span class="feature-checkbox__label">Airbags laterais</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Imagens -->
-        <div class="form-section">
-          <h4 class="form-section__title">Imagens</h4>
-          
-          <div class="image-upload">
-            <div class="input-group">
-              <label for="images" class="input-group__label">URLs das Imagens</label>
-              <textarea id="images" class="input-group__textarea" rows="3" placeholder="https://exemplo.com/imagem1.jpg&#10;https://exemplo.com/imagem2.jpg"></textarea>
-            </div>
-            
-            <div class="upload-section">
-              <label class="btn btn--secondary upload-btn">
-                <span class="btn__icon">📷</span>
-                Selecionar Arquivos
-                <input id="imagesFiles" type="file" accept="image/*" multiple capture="environment" hidden>
-              </label>
-              <div class="upload-hint">
-                No celular abre a câmera; no computador abre o gerenciador de arquivos
-              </div>
-            </div>
-            
-            <div id="imagesPreview" class="images-preview"></div>
-          </div>
-        </div>
-
-        <!-- Ações do Formulário -->
-        <div class="form-actions">
-          <div class="form-actions__left">
-            <label class="toggle-switch">
-              <input type="checkbox" id="published" checked/>
-              <span class="toggle-switch__slider"></span>
-              <span class="toggle-switch__label">Publicado</span>
-            </label>
-          </div>
-          
-          <div class="form-actions__right">
-            <button type="button" id="resetForm" class="btn btn--ghost">
-              <span class="btn__icon">🗑️</span>
-              Limpar
-            </button>
-            <button type="submit" class="btn btn--primary">
-              <span class="btn__icon">💾</span>
-              <span id="submitText">Salvar</span>
-            </button>
-          </div>
-        </div>
-      </form>
-    </section>
-
-    <!-- Lista de Carros -->
-    <section class="admin-section glass-card">
-      <div class="section-header">
-        <h3 class="section-title">
-          <span class="section-icon">📋</span>
-          Meus Carros
-        </h3>
-        <div class="section-subtitle">Gerencie todos os veículos cadastrados</div>
+        <div class="section-subtitle">Visualize e gerencie todos os veículos do catálogo</div>
       </div>
       
       <div class="table-controls">
         <div class="search-box">
-          <input id="searchAdmin" type="search" class="search-box__input" placeholder="Buscar carros..."/>
           <span class="search-box__icon">🔍</span>
+          <input type="text" id="searchAdmin" class="search-box__input" placeholder="Buscar por marca, modelo ou cor...">
         </div>
         
         <div class="table-actions">
-          <button id="exportJson" class="btn btn--secondary">
-            <span class="btn__icon">📤</span>
-            Exportar
+          <button class="btn btn--primary" id="addCarBtn">
+            <span class="btn__icon">➕</span>
+            Adicionar Veículo
           </button>
+          
           <label class="btn btn--secondary">
             <span class="btn__icon">📥</span>
-            Importar
-            <input id="importJson" type="file" accept="application/json" hidden/>
+            Importar JSON
+            <input type="file" id="importJson" accept=".json" hidden/>
           </label>
+          
+          <button class="btn btn--ghost" id="exportJson">
+            <span class="btn__icon">📤</span>
+            Exportar JSON
+          </button>
         </div>
       </div>
-      
+
       <div class="table-container">
         <table class="modern-table" id="carsTable">
           <thead>
@@ -518,9 +231,263 @@
         <div class="empty-table__icon">📝</div>
         <h4 class="empty-table__title">Nenhum carro cadastrado</h4>
         <p class="empty-table__text">Comece adicionando seu primeiro veículo ao catálogo</p>
+        <button class="btn btn--primary" onclick="document.getElementById('addCarBtn').click()">
+          <span class="btn__icon">➕</span>
+          Adicionar Primeiro Veículo
+        </button>
       </div>
     </section>
   </main>
+
+  <!-- Modal do Formulário de Veículo -->
+  <div id="carModal" class="modal" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__content glass-card">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle">Adicionar Novo Veículo</h3>
+        <button class="modal__close" id="closeCarModal">
+          <span class="modal__close-icon">×</span>
+        </button>
+      </div>
+      
+      <div class="modal__body">
+        <form id="carForm" class="car-form">
+          <input type="hidden" id="carId"/>
+          
+          <!-- Informações Básicas -->
+          <div class="form-section">
+            <h4 class="form-section__title">Informações Básicas</h4>
+            <div class="form-grid">
+              <div class="input-group">
+                <label for="brand" class="input-group__label">Marca *</label>
+                <input id="brand" class="input-group__input" required placeholder="Ex: Toyota"/>
+              </div>
+              
+              <div class="input-group">
+                <label for="model" class="input-group__label">Modelo *</label>
+                <input id="model" class="input-group__input" required placeholder="Ex: Corolla"/>
+              </div>
+              
+              <div class="input-group">
+                <label for="year" class="input-group__label">Ano *</label>
+                <input id="year" type="number" class="input-group__input" required min="1950" max="2100"/>
+              </div>
+              
+              <div class="input-group">
+                <label for="color" class="input-group__label">Cor *</label>
+                <input id="color" class="input-group__input" required placeholder="Ex: Prata"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Especificações Técnicas -->
+          <div class="form-section">
+            <h4 class="form-section__title">Especificações Técnicas</h4>
+            <div class="form-grid">
+              <div class="input-group">
+                <label for="price" class="input-group__label">Preço (R$) *</label>
+                <input id="price" type="number" class="input-group__input" required step="500" min="0"/>
+              </div>
+              
+              <div class="input-group">
+                <label for="km" class="input-group__label">Quilometragem *</label>
+                <input id="km" type="number" class="input-group__input" required step="100" min="0"/>
+              </div>
+              
+              <div class="input-group">
+                <label for="transmission" class="input-group__label">Câmbio *</label>
+                <select id="transmission" class="input-group__select" required>
+                  <option value="">Selecione...</option>
+                  <option value="Manual">Manual</option>
+                  <option value="Automático">Automático</option>
+                  <option value="CVT">CVT</option>
+                </select>
+              </div>
+              
+              <div class="input-group">
+                <label for="fuel" class="input-group__label">Combustível *</label>
+                <select id="fuel" class="input-group__select" required>
+                  <option value="">Selecione...</option>
+                  <option value="Flex">Flex</option>
+                  <option value="Gasolina">Gasolina</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Elétrico">Elétrico</option>
+                  <option value="Híbrido">Híbrido</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descrição -->
+          <div class="form-section">
+            <h4 class="form-section__title">Descrição</h4>
+            <div class="input-group">
+              <label for="description" class="input-group__label">Descrição do Veículo</label>
+              <textarea id="description" class="input-group__textarea" rows="4" placeholder="Destaques, estado, revisões, etc."></textarea>
+            </div>
+          </div>
+
+          <!-- Consultores -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4 class="form-section__title">Consultores</h4>
+              <button type="button" id="addConsultant" class="btn btn--secondary btn--sm">
+                <span class="btn__icon">➕</span>
+                Adicionar
+              </button>
+            </div>
+            <div id="consultantsList" class="consultants-list"></div>
+          </div>
+
+          <template id="tplConsultant">
+            <div class="consultant-item glass-card">
+              <div class="consultant-item__content">
+                <div class="input-group">
+                  <label class="input-group__label">Nome</label>
+                  <input class="c-name input-group__input" placeholder="Ex: João Silva"/>
+                </div>
+                <div class="input-group">
+                  <label class="input-group__label">WhatsApp</label>
+                  <input class="c-phone input-group__input" placeholder="5511999999999"/>
+                </div>
+              </div>
+              <button type="button" class="btn btn--danger btn--sm c-remove">
+                <span class="btn__icon">🗑️</span>
+                Remover
+              </button>
+            </div>
+          </template>
+
+          <!-- Opcionais -->
+          <div class="form-section">
+            <h4 class="form-section__title">Opcionais</h4>
+            <div class="features-grid">
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Direção hidráulica">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Direção hidráulica</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Direção elétrica">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Direção elétrica</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Ar-condicionado">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Ar-condicionado</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Ar digital">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Ar digital</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Vidros elétricos">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Vidros elétricos</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Travas elétricas">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Travas elétricas</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Alarme">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Alarme</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Multimídia">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Multimídia</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Câmera de ré">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Câmera de ré</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Sensor de estacionamento">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Sensor de estacionamento</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Piloto automático">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Piloto automático</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Controle de estabilidade (ESP)">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Controle de estabilidade (ESP)</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Controle de tração (TCS)">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Controle de tração (TCS)</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Bancos de couro">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Bancos de couro</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Teto solar">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Teto solar</span>
+              </label>
+              <label class="feature-checkbox">
+                <input type="checkbox" class="feat" value="Farol de neblina">
+                <span class="feature-checkbox__checkmark"></span>
+                <span class="feature-checkbox__label">Farol de neblina</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Upload de Imagens -->
+          <div class="form-section">
+            <h4 class="form-section__title">Imagens</h4>
+            <div class="image-upload">
+              <div class="upload-section">
+                <label class="btn btn--secondary upload-btn">
+                  <span class="btn__icon">📁</span>
+                  Escolher Imagens
+                  <input type="file" id="imagesFiles" accept="image/*" multiple hidden/>
+                </label>
+                <div class="upload-hint">Selecione múltiplas imagens do veículo</div>
+              </div>
+              
+              <textarea id="images" class="input-group__textarea" rows="3" placeholder="URLs das imagens (uma por linha)" hidden></textarea>
+              <div id="imagesPreview" class="images-preview"></div>
+            </div>
+          </div>
+
+          <!-- Ações do Formulário -->
+          <div class="form-actions">
+            <div class="form-actions__left">
+              <label class="toggle-switch">
+                <input type="checkbox" id="published" checked>
+                <span class="toggle-switch__slider"></span>
+                <span class="toggle-switch__label">Publicar imediatamente</span>
+              </label>
+            </div>
+            
+            <div class="form-actions__right">
+              <button type="button" class="btn btn--ghost" id="resetForm">
+                <span class="btn__icon">🔄</span>
+                Limpar
+              </button>
+              <button type="submit" class="btn btn--primary">
+                <span class="btn__icon">💾</span>
+                <span id="submitText">Salvar</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="container">
