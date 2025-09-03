@@ -1,97 +1,221 @@
-/* ------------------------- */
-/*  1. VARIÁVEIS GLOBAIS     */
-/* ------------------------- */
+/* ================================ */
+/*  SISTEMA DE TEMAS MODERNO        */
+/* ================================ */
+
 :root {
-  /* Paleta de Cores Moderna */
-  --color-primary: #007BFF;
-  --color-primary-hover: #0056b3;
-  --color-background: #f8f9fa;
-  --color-surface: #ffffff;
-  --color-text: #212529;
-  --color-text-muted: #6c757d;
-  --color-border: #dee2e6;
-  --color-success: #28a745;
-
-  /* Estilos de UI */
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 8px rgba(0,0,0,0.08);
-  --border-radius: 8px;
-  --transition-fast: 0.2s ease;
-  --transition-smooth: 0.3s ease;
-
-  /* Tipografia */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Tema Claro */
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f8fafc;
+  --bg-glass: rgba(255, 255, 255, 0.25);
+  --bg-glass-hover: rgba(255, 255, 255, 0.35);
+  
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --text-inverse: #ffffff;
+  
+  --accent-primary: #667eea;
+  --accent-secondary: #764ba2;
+  --accent-success: #48bb78;
+  --accent-warning: #ed8936;
+  --accent-danger: #f56565;
+  
+  --border-color: rgba(226, 232, 240, 0.8);
+  --border-glass: rgba(255, 255, 255, 0.2);
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-glass: 0 8px 32px rgba(31, 38, 135, 0.37);
+  
+  --blur-sm: blur(4px);
+  --blur-md: blur(8px);
+  --blur-lg: blur(16px);
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ------------------------- */
-/*  2. RESET E ESTILOS BASE  */
-/* ------------------------- */
+[data-theme="dark"] {
+  /* Tema Escuro */
+  --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --bg-secondary: #1a202c;
+  --bg-tertiary: #2d3748;
+  --bg-glass: rgba(26, 32, 44, 0.25);
+  --bg-glass-hover: rgba(26, 32, 44, 0.35);
+  
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a0aec0;
+  --text-inverse: #1a202c;
+  
+  --accent-primary: #90cdf4;
+  --accent-secondary: #b794f6;
+  --accent-success: #68d391;
+  --accent-warning: #fbb040;
+  --accent-danger: #fc8181;
+  
+  --border-color: rgba(74, 85, 104, 0.6);
+  --border-glass: rgba(255, 255, 255, 0.1);
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ================================ */
+/*  RESET E BASE                    */
+/* ================================ */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: var(--font-family);
-  background-color: var(--color-background);
-  color: var(--color-text);
+  font-family: var(--font-secondary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  transition: background var(--transition-normal), color var(--transition-normal);
 }
 
 .container {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-/* ------------------------- */
-/*  3. COMPONENTES GLOBAIS   */
-/* ------------------------- */
-.card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-smooth), transform var(--transition-smooth);
+/* ================================ */
+/*  COMPONENTES GLASSMORPHISM       */
+/* ================================ */
+
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass);
+  transition: all var(--transition-normal);
 }
+
+.glass-card:hover {
+  background: var(--bg-glass-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ================================ */
+/*  BOTÕES MODERNOS                 */
+/* ================================ */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   padding: 12px 24px;
-  border: 1px solid transparent;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  text-align: center;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
 }
 
-.btn.ghost {
-  background-color: transparent;
-  color: var(--color-text-muted);
-  border-color: var(--color-border);
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left var(--transition-slow);
 }
 
-.btn.ghost:hover {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  border-color: var(--color-border);
+.btn:hover::before {
+  left: 100%;
 }
 
-/* ------------------------- */
-/*  4. LAYOUT HEADER E FOOTER */
-/* ------------------------- */
+.btn--primary {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn--secondary {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-sm);
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+}
+
+.btn--secondary:hover {
+  background: var(--bg-glass-hover);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btn--ghost:hover {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+}
+
+.btn__icon {
+  font-size: 1rem;
+}
+
+/* ================================ */
+/*  HEADER MODERNO                  */
+/* ================================ */
+
 .topbar {
-  background-color: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-bottom: 1px solid var(--border-glass);
   padding: 16px 0;
-  margin-bottom: 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all var(--transition-normal);
 }
 
 .topbar__content {
@@ -101,31 +225,243 @@ body {
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-primary);
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-text);
-}
-
-.nav a {
+  color: var(--text-primary);
   text-decoration: none;
-  color: var(--color-text-muted);
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: var(--border-radius);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
-.nav a.active,
-.nav a:hover {
-  color: var(--color-primary);
-  background-color: rgba(0, 123, 255, 0.1);
+.brand__icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.nav__link:hover,
+.nav__link.active {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.nav__icon {
+  font-size: 1.1rem;
+}
+
+/* ================================ */
+/*  TOGGLE DE TEMA                  */
+/* ================================ */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-glass-hover);
+  transform: scale(1.05);
+}
+
+.theme-toggle__icon {
+  font-size: 1.2rem;
+  transition: transform var(--transition-normal);
+}
+
+.theme-toggle:hover .theme-toggle__icon {
+  transform: rotate(180deg);
+}
+
+/* ================================ */
+/*  INPUTS MODERNOS                 */
+/* ================================ */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group__label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+.input-group__input,
+.input-group__select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.input-group__input:focus,
+.input-group__select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-group__input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ================================ */
+/*  FOOTER MODERNO                  */
+/* ================================ */
 
 .footer {
-  text-align: center;
-  padding: 32px 0;
-  margin-top: 48px;
-  color: var(--color-text-muted);
+  margin-top: 80px;
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-md);
+  border-top: 1px solid var(--border-glass);
+  padding: 40px 0 20px;
+}
+
+.footer__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 32px;
+}
+
+.footer__description {
+  color: var(--text-muted);
+  margin-top: 8px;
   font-size: 0.9rem;
+}
+
+.footer__links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.footer__section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.footer__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer__list a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer__list a:hover {
+  color: var(--accent-primary);
+}
+
+.footer__bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ================================ */
+/*  RESPONSIVIDADE                  */
+/* ================================ */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .topbar__content {
+    gap: 16px;
+  }
+  
+  .brand {
+    font-size: 1.3rem;
+  }
+  
+  .nav {
+    gap: 8px;
+  }
+  
+  .nav__link {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .footer__content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .footer__links {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand__icon {
+    font-size: 1.5rem;
+  }
+  
+  .brand {
+    font-size: 1.2rem;
+  }
+  
+  .nav__link span:not(.nav__icon) {
+    display: none;
+  }
+  
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
 }
 

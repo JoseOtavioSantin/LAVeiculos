@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AutoCat - Catálogo de Carros</title>
 
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Inter + Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/base.css"/>
@@ -21,69 +21,208 @@
 
   <header class="topbar">
     <div class="container topbar__content">
-      <h1 class="brand"><img id="brandLogo" class="brand__logo" hidden alt="Logo"/><span id="brandName">AutoCat</span></h1>
+      <h1 class="brand">
+        <div class="brand__icon">🚗</div>
+        <span id="brandName">AutoCat</span>
+      </h1>
       <nav class="nav">
-        <a href="index.html" class="active">Catálogo</a>
+        <a href="index.html" class="nav__link active">
+          <span class="nav__icon">🏠</span>
+          Catálogo
+        </a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+          <span class="theme-toggle__icon">🌙</span>
+        </button>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <section class="filters card">
-      <div class="filters__row">
-        <input id="q" type="search" placeholder="Buscar por modelo, marca..." aria-label="Buscar"/>
-        <select id="brandSelect" aria-label="Filtrar por marca">
-          <option value="">Todas as marcas</option>
-        </select>
-        <select id="yearSelect" aria-label="Filtrar por ano mínimo">
-          <option value="">Ano mínimo</option>
-        </select>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero__content">
+        <h2 class="hero__title">Encontre o carro dos seus sonhos</h2>
+        <p class="hero__subtitle">Explore nossa coleção premium de veículos com filtros inteligentes</p>
       </div>
-      <div class="filters__row">
-        <input id="minPrice" type="number" min="0" step="1000" placeholder="Preço mín (R$)"/>
-        <input id="maxPrice" type="number" min="0" step="1000" placeholder="Preço máx (R$)"/>
-        <select id="sortSelect" aria-label="Ordenar">
-          <option value="recent">Mais recentes</option>
-          <option value="priceAsc">Preço: menor → maior</option>
-          <option value="priceDesc">Preço: maior → menor</option>
-          <option value="yearDesc">Ano: mais novo → mais antigo</option>
-          <option value="kmAsc">KM: menor → maior</option>
-        </select>
-        <button id="clearFilters" class="btn ghost" type="button">Limpar Filtros</button>
+      <div class="hero__stats">
+        <div class="stat">
+          <span class="stat__number" id="totalCars">0</span>
+          <span class="stat__label">Carros</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number" id="totalBrands">0</span>
+          <span class="stat__label">Marcas</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">2025</span>
+          <span class="stat__label">Ano</span>
+        </div>
       </div>
     </section>
 
-    <section id="grid" class="grid"></section>
-
-    <template id="cardTemplate">
-      <article class="car card">
-        <a class="car__thumb__wrap" href="#">
-          <img class="car__thumb" alt="Imagem do carro"/>
-          <span class="badge">NOVO</span>
-        </a>
-        <div class="car__body">
-          <header class="car__header">
-            <h3 class="car__title"></h3>
-            <strong class="car__price"></strong>
-          </header>
-          <p class="car__meta"></p>
-          <footer class="car__footer">
-            <span class="chip year"></span>
-            <span class="chip km"></span>
-            <span class="chip fuel"></span>
-          </footer>
+    <!-- Filters Section -->
+    <section class="filters glass-card">
+      <div class="filters__header">
+        <h3 class="filters__title">Filtros Inteligentes</h3>
+        <button id="clearFilters" class="btn btn--ghost" type="button">
+          <span class="btn__icon">🗑️</span>
+          Limpar
+        </button>
+      </div>
+      
+      <div class="filters__grid">
+        <div class="input-group">
+          <label for="q" class="input-group__label">Buscar</label>
+          <input id="q" type="search" placeholder="Digite modelo, marca..." aria-label="Buscar" class="input-group__input"/>
         </div>
-      </article>
-    </template>
+        
+        <div class="input-group">
+          <label for="brandSelect" class="input-group__label">Marca</label>
+          <select id="brandSelect" aria-label="Filtrar por marca" class="input-group__select">
+            <option value="">Todas as marcas</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="yearSelect" class="input-group__label">Ano Mínimo</label>
+          <select id="yearSelect" aria-label="Filtrar por ano mínimo" class="input-group__select">
+            <option value="">Qualquer ano</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="minPrice" class="input-group__label">Preço Mínimo</label>
+          <input id="minPrice" type="number" min="0" step="1000" placeholder="R$ 0" class="input-group__input"/>
+        </div>
+        
+        <div class="input-group">
+          <label for="maxPrice" class="input-group__label">Preço Máximo</label>
+          <input id="maxPrice" type="number" min="0" step="1000" placeholder="R$ 999.999" class="input-group__input"/>
+        </div>
+        
+        <div class="input-group">
+          <label for="sortSelect" class="input-group__label">Ordenar por</label>
+          <select id="sortSelect" aria-label="Ordenar" class="input-group__select">
+            <option value="recent">Mais recentes</option>
+            <option value="priceAsc">Preço: menor → maior</option>
+            <option value="priceDesc">Preço: maior → menor</option>
+            <option value="yearDesc">Ano: mais novo → mais antigo</option>
+            <option value="kmAsc">KM: menor → maior</option>
+          </select>
+        </div>
+      </div>
+    </section>
 
-    <div id="emptyState" class="empty card" hidden>
-      <p>Nenhum carro encontrado com os filtros selecionados.</p>
-    </div>
+    <!-- Results Section -->
+    <section class="results">
+      <div class="results__header">
+        <h3 class="results__title">Resultados</h3>
+        <div class="results__count">
+          <span id="resultsCount">0</span> carros encontrados
+        </div>
+      </div>
+      
+      <div id="grid" class="grid"></div>
+      
+      <div id="emptyState" class="empty glass-card" hidden>
+        <div class="empty__icon">🔍</div>
+        <h4 class="empty__title">Nenhum carro encontrado</h4>
+        <p class="empty__text">Tente ajustar os filtros para encontrar mais opções</p>
+      </div>
+    </section>
   </main>
+
+  <!-- Car Card Template -->
+  <template id="cardTemplate">
+    <article class="car glass-card">
+      <div class="car__image-container">
+        <a class="car__image-link" href="#">
+          <img class="car__image" alt="Imagem do carro"/>
+          <div class="car__overlay">
+            <span class="car__view-btn">Ver Detalhes</span>
+          </div>
+        </a>
+        <span class="car__badge">NOVO</span>
+        <button class="car__favorite" aria-label="Favoritar">
+          <span class="car__favorite-icon">🤍</span>
+        </button>
+      </div>
+      
+      <div class="car__content">
+        <header class="car__header">
+          <h3 class="car__title"></h3>
+          <div class="car__price-container">
+            <strong class="car__price"></strong>
+            <span class="car__price-label">à vista</span>
+          </div>
+        </header>
+        
+        <p class="car__description"></p>
+        
+        <div class="car__specs">
+          <div class="spec">
+            <span class="spec__icon">📅</span>
+            <span class="spec__value year"></span>
+          </div>
+          <div class="spec">
+            <span class="spec__icon">🛣️</span>
+            <span class="spec__value km"></span>
+          </div>
+          <div class="spec">
+            <span class="spec__icon">⛽</span>
+            <span class="spec__value fuel"></span>
+          </div>
+        </div>
+        
+        <div class="car__actions">
+          <button class="btn btn--primary">
+            <span class="btn__icon">💬</span>
+            Contatar
+          </button>
+          <button class="btn btn--secondary">
+            <span class="btn__icon">📋</span>
+            Detalhes
+          </button>
+        </div>
+      </div>
+    </article>
+  </template>
 
   <footer class="footer">
     <div class="container">
-      <small id="footerBrand">AutoCat • Catálogo de Carros • 2025</small>
+      <div class="footer__content">
+        <div class="footer__brand">
+          <div class="brand">
+            <div class="brand__icon">🚗</div>
+            <span>AutoCat</span>
+          </div>
+          <p class="footer__description">
+            Sua plataforma premium para encontrar o carro perfeito
+          </p>
+        </div>
+        
+        <div class="footer__links">
+          <div class="footer__section">
+            <h4 class="footer__section-title">Navegação</h4>
+            <ul class="footer__list">
+              <li><a href="index.html">Catálogo</a></li>
+              <li><a href="admin.html">Administração</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer__section">
+            <h4 class="footer__section-title">Contato</h4>
+            <ul class="footer__list">
+              <li>📧 contato@autocat.com</li>
+              <li>📱 (11) 99999-9999</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer__bottom">
+        <small>&copy; 2025 AutoCat. Todos os direitos reservados.</small>
+      </div>
     </div>
   </footer>
 
