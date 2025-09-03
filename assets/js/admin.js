@@ -91,7 +91,6 @@ class AdminManager {
     this.initThemeControls();
     this.bindEvents();
     this.renderTable();
-    this.addConsultantRow(); // Adicionar uma linha inicial
   }
 
   // ================================
@@ -443,7 +442,8 @@ class AdminManager {
       
       // Veículo
       const vehicleCell = document.createElement('td');
-      vehicleCell.innerHTML = `<strong>${car.brand} ${car.model}</strong><br><small>${car.color}</small>`;
+      vehicleCell.innerHTML = `<strong>${car.brand} ${car.model}</strong>  
+<small>${car.color}</small>`;
       
       // Ano
       const yearCell = document.createElement('td');
@@ -710,5 +710,6 @@ class AdminManager {
 // INICIALIZAÇÃO
 // ================================
 
+// Como o script é carregado no final do body, o DOM já está pronto.
+// Basta criar a instância diretamente e uma única vez.
 window.adminManager = new AdminManager();
-
