@@ -618,6 +618,14 @@ class AdminManager {
   }
 }
 
+
+// DEBUG: log para saber quando openModal é chamado
+const _openModalOriginal = AdminManager.prototype.openModal;
+AdminManager.prototype.openModal = function (...args) {
+  console.trace("openModal foi chamado!", args);
+  return _openModalOriginal.apply(this, args);
+};
+
 // ================================
 // INICIALIZAÇÃO
 // ================================
